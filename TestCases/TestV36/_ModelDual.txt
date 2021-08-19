@@ -1,0 +1,131 @@
+Min 150 λ_sMAX[NS1,A] + 150 λ_sMAX[NS2,A] + 100 λ_dMAX[ND1,A] + 100 λ_dMAX[ND2,A] + 100 λ_dMAX[ND3,A] + 100 λ_dMAX[ND4,A] + 150 λ_slMAX[S01] + 150 λ_slMAX[S02] + 100 λ_dlMAX[D1] + 100 λ_dlMAX[D2] + 100 λ_dlMAX[D3] + 100 λ_dlMAX[D4] + 100 λ_fMAX[NS1,ND1,A] + 100 λ_fMAX[NS1,ND2,A] + 100 λ_fMAX[NS1,ND3,A] + 100 λ_fMAX[NS1,ND4,A] + 100 λ_fMAX[NS2,ND1,A] + 100 λ_fMAX[NS2,ND2,A] + 100 λ_fMAX[NS2,ND3,A] + 100 λ_fMAX[NS2,ND4,A] + 100 λ_fMAX[ND1,NS1,A] + 100 λ_fMAX[ND1,NS2,A] + 100 λ_fMAX[ND2,NS1,A] + 100 λ_fMAX[ND2,NS2,A] + 100 λ_fMAX[ND3,NS1,A] + 100 λ_fMAX[ND3,NS2,A] + 100 λ_fMAX[ND4,NS1,A] + 100 λ_fMAX[ND4,NS2,A] + 100 λ_aMAX[A01] + 100 λ_aMAX[A02] + 100 λ_aMAX[A03] + 100 λ_aMAX[A04] + 100 λ_aMAX[A05] + 100 λ_aMAX[A06] + 100 λ_aMAX[A07] + 100 λ_aMAX[A08] + 100 λ_xMAX[T01,NT1,A] + 100 λ_gMAX[T01,NT1,A]
+Subject to
+ π_supply[NS1,A] + π_balance[NS1,A] + λ_sMAX[NS1,A] ≥ 0.0
+ π_supply[NS2,A] + π_balance[NS2,A] + λ_sMAX[NS2,A] ≥ 0.0
+ π_supply[NT1,A] + π_balance[NT1,A] + λ_sMAX[NT1,A] ≥ 0.0
+ π_supply[ND1,A] + π_balance[ND1,A] + λ_sMAX[ND1,A] ≥ 0.0
+ π_supply[ND2,A] + π_balance[ND2,A] + λ_sMAX[ND2,A] ≥ 0.0
+ π_supply[ND3,A] + π_balance[ND3,A] + λ_sMAX[ND3,A] ≥ 0.0
+ π_supply[ND4,A] + π_balance[ND4,A] + λ_sMAX[ND4,A] ≥ 0.0
+ π_demand[NS1,A] - π_balance[NS1,A] + λ_dMAX[NS1,A] ≥ 0.0
+ π_demand[NS2,A] - π_balance[NS2,A] + λ_dMAX[NS2,A] ≥ 0.0
+ π_demand[NT1,A] - π_balance[NT1,A] + λ_dMAX[NT1,A] ≥ 0.0
+ π_demand[ND1,A] - π_balance[ND1,A] + λ_dMAX[ND1,A] ≥ 0.0
+ π_demand[ND2,A] - π_balance[ND2,A] + λ_dMAX[ND2,A] ≥ 0.0
+ π_demand[ND3,A] - π_balance[ND3,A] + λ_dMAX[ND3,A] ≥ 0.0
+ π_demand[ND4,A] - π_balance[ND4,A] + λ_dMAX[ND4,A] ≥ 0.0
+ -π_supply[NS1,A] + λ_slMAX[S01] ≥ -10.0
+ -π_supply[NS2,A] + λ_slMAX[S02] ≥ -30.0
+ -π_demand[ND1,A] + λ_dlMAX[D1] ≥ 20.0
+ -π_demand[ND2,A] + λ_dlMAX[D2] ≥ 30.0
+ -π_demand[ND3,A] + λ_dlMAX[D3] ≥ 40.0
+ -π_demand[ND4,A] + λ_dlMAX[D4] ≥ 50.0
+ π_balance[ND1,A] - π_balance[NS1,A] + λ_fMAX[NS1,ND1,A] + λ_aMAX[A01] ≥ 0.0
+ π_balance[NS1,A] - π_balance[ND1,A] + λ_fMAX[ND1,NS1,A] + λ_aMAX[A01] ≥ 0.0
+ π_balance[ND2,A] - π_balance[NS1,A] + λ_fMAX[NS1,ND2,A] + λ_aMAX[A02] ≥ 0.0
+ π_balance[NS1,A] - π_balance[ND2,A] + λ_fMAX[ND2,NS1,A] + λ_aMAX[A02] ≥ 0.0
+ π_balance[ND3,A] - π_balance[NS1,A] + λ_fMAX[NS1,ND3,A] + λ_aMAX[A03] ≥ 0.0
+ π_balance[NS1,A] - π_balance[ND3,A] + λ_fMAX[ND3,NS1,A] + λ_aMAX[A03] ≥ 0.0
+ π_balance[ND4,A] - π_balance[NS1,A] + λ_fMAX[NS1,ND4,A] + λ_aMAX[A04] ≥ 0.0
+ π_balance[NS1,A] - π_balance[ND4,A] + λ_fMAX[ND4,NS1,A] + λ_aMAX[A04] ≥ 0.0
+ π_balance[ND1,A] - π_balance[NS2,A] + λ_fMAX[NS2,ND1,A] + λ_aMAX[A05] ≥ 0.0
+ π_balance[NS2,A] - π_balance[ND1,A] + λ_fMAX[ND1,NS2,A] + λ_aMAX[A05] ≥ 0.0
+ π_balance[ND2,A] - π_balance[NS2,A] + λ_fMAX[NS2,ND2,A] + λ_aMAX[A06] ≥ 0.0
+ π_balance[NS2,A] - π_balance[ND2,A] + λ_fMAX[ND2,NS2,A] + λ_aMAX[A06] ≥ 0.0
+ π_balance[ND3,A] - π_balance[NS2,A] + λ_fMAX[NS2,ND3,A] + λ_aMAX[A07] ≥ 0.0
+ π_balance[NS2,A] - π_balance[ND3,A] + λ_fMAX[ND3,NS2,A] + λ_aMAX[A07] ≥ 0.0
+ π_balance[ND4,A] - π_balance[NS2,A] + λ_fMAX[NS2,ND4,A] + λ_aMAX[A08] ≥ 0.0
+ π_balance[NS2,A] - π_balance[ND4,A] + λ_fMAX[ND4,NS2,A] + λ_aMAX[A08] ≥ 0.0
+ -π_balance[NT1,A] - π_conversion[NT1,T01,A,A] + λ_xMAX[T01,NT1,A] ≥ -100.0
+ π_balance[NT1,A] + π_conversion[NT1,T01,A,A] + λ_gMAX[T01,NT1,A] ≥ 0.0
+ λ_sMAX[NS1,A] ≥ 0.0
+ λ_sMAX[NS2,A] ≥ 0.0
+ λ_sMAX[NT1,A] ≥ 0.0
+ λ_sMAX[ND1,A] ≥ 0.0
+ λ_sMAX[ND2,A] ≥ 0.0
+ λ_sMAX[ND3,A] ≥ 0.0
+ λ_sMAX[ND4,A] ≥ 0.0
+ λ_dMAX[NS1,A] ≥ 0.0
+ λ_dMAX[NS2,A] ≥ 0.0
+ λ_dMAX[NT1,A] ≥ 0.0
+ λ_dMAX[ND1,A] ≥ 0.0
+ λ_dMAX[ND2,A] ≥ 0.0
+ λ_dMAX[ND3,A] ≥ 0.0
+ λ_dMAX[ND4,A] ≥ 0.0
+ λ_slMAX[S01] ≥ 0.0
+ λ_slMAX[S02] ≥ 0.0
+ λ_dlMAX[D1] ≥ 0.0
+ λ_dlMAX[D2] ≥ 0.0
+ λ_dlMAX[D3] ≥ 0.0
+ λ_dlMAX[D4] ≥ 0.0
+ λ_fMAX[NS1,NS1,A] ≥ 0.0
+ λ_fMAX[NS1,NS2,A] ≥ 0.0
+ λ_fMAX[NS1,NT1,A] ≥ 0.0
+ λ_fMAX[NS1,ND1,A] ≥ 0.0
+ λ_fMAX[NS1,ND2,A] ≥ 0.0
+ λ_fMAX[NS1,ND3,A] ≥ 0.0
+ λ_fMAX[NS1,ND4,A] ≥ 0.0
+ λ_fMAX[NS2,NS1,A] ≥ 0.0
+ λ_fMAX[NS2,NS2,A] ≥ 0.0
+ λ_fMAX[NS2,NT1,A] ≥ 0.0
+ λ_fMAX[NS2,ND1,A] ≥ 0.0
+ λ_fMAX[NS2,ND2,A] ≥ 0.0
+ λ_fMAX[NS2,ND3,A] ≥ 0.0
+ λ_fMAX[NS2,ND4,A] ≥ 0.0
+ λ_fMAX[NT1,NS1,A] ≥ 0.0
+ λ_fMAX[NT1,NS2,A] ≥ 0.0
+ λ_fMAX[NT1,NT1,A] ≥ 0.0
+ λ_fMAX[NT1,ND1,A] ≥ 0.0
+ λ_fMAX[NT1,ND2,A] ≥ 0.0
+ λ_fMAX[NT1,ND3,A] ≥ 0.0
+ λ_fMAX[NT1,ND4,A] ≥ 0.0
+ λ_fMAX[ND1,NS1,A] ≥ 0.0
+ λ_fMAX[ND1,NS2,A] ≥ 0.0
+ λ_fMAX[ND1,NT1,A] ≥ 0.0
+ λ_fMAX[ND1,ND1,A] ≥ 0.0
+ λ_fMAX[ND1,ND2,A] ≥ 0.0
+ λ_fMAX[ND1,ND3,A] ≥ 0.0
+ λ_fMAX[ND1,ND4,A] ≥ 0.0
+ λ_fMAX[ND2,NS1,A] ≥ 0.0
+ λ_fMAX[ND2,NS2,A] ≥ 0.0
+ λ_fMAX[ND2,NT1,A] ≥ 0.0
+ λ_fMAX[ND2,ND1,A] ≥ 0.0
+ λ_fMAX[ND2,ND2,A] ≥ 0.0
+ λ_fMAX[ND2,ND3,A] ≥ 0.0
+ λ_fMAX[ND2,ND4,A] ≥ 0.0
+ λ_fMAX[ND3,NS1,A] ≥ 0.0
+ λ_fMAX[ND3,NS2,A] ≥ 0.0
+ λ_fMAX[ND3,NT1,A] ≥ 0.0
+ λ_fMAX[ND3,ND1,A] ≥ 0.0
+ λ_fMAX[ND3,ND2,A] ≥ 0.0
+ λ_fMAX[ND3,ND3,A] ≥ 0.0
+ λ_fMAX[ND3,ND4,A] ≥ 0.0
+ λ_fMAX[ND4,NS1,A] ≥ 0.0
+ λ_fMAX[ND4,NS2,A] ≥ 0.0
+ λ_fMAX[ND4,NT1,A] ≥ 0.0
+ λ_fMAX[ND4,ND1,A] ≥ 0.0
+ λ_fMAX[ND4,ND2,A] ≥ 0.0
+ λ_fMAX[ND4,ND3,A] ≥ 0.0
+ λ_fMAX[ND4,ND4,A] ≥ 0.0
+ λ_aMAX[A01] ≥ 0.0
+ λ_aMAX[A02] ≥ 0.0
+ λ_aMAX[A03] ≥ 0.0
+ λ_aMAX[A04] ≥ 0.0
+ λ_aMAX[A05] ≥ 0.0
+ λ_aMAX[A06] ≥ 0.0
+ λ_aMAX[A07] ≥ 0.0
+ λ_aMAX[A08] ≥ 0.0
+ λ_xMAX[T01,NS1,A] ≥ 0.0
+ λ_xMAX[T01,NS2,A] ≥ 0.0
+ λ_xMAX[T01,NT1,A] ≥ 0.0
+ λ_xMAX[T01,ND1,A] ≥ 0.0
+ λ_xMAX[T01,ND2,A] ≥ 0.0
+ λ_xMAX[T01,ND3,A] ≥ 0.0
+ λ_xMAX[T01,ND4,A] ≥ 0.0
+ λ_gMAX[T01,NS1,A] ≥ 0.0
+ λ_gMAX[T01,NS2,A] ≥ 0.0
+ λ_gMAX[T01,NT1,A] ≥ 0.0
+ λ_gMAX[T01,ND1,A] ≥ 0.0
+ λ_gMAX[T01,ND2,A] ≥ 0.0
+ λ_gMAX[T01,ND3,A] ≥ 0.0
+ λ_gMAX[T01,ND4,A] ≥ 0.0
