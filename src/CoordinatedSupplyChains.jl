@@ -5,7 +5,9 @@ module CoordinatedSupplyChains
 using DelimitedFiles
 using JuMP
 using Clp
-using Plots; pgfplotsx()
+using Plots
+using PGFPlotsX
+pgfplotsx()
 
 ################################################################################
 ### EXPORT LIST
