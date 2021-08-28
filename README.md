@@ -24,13 +24,13 @@ If `CoordinatedSupplyChains.jl` is useful in your research, we appreciate your c
 
 ```latex
 @article{TominacZavala2020,
-	title = "Economic properties of multi-product supply chains",
-	journal = "Comput Chem Eng",
-	pages = "107157",
-	year = "2020",
-	issn = "0098-1354",
-	doi = "https://doi.org/10.1016/j.compchemeng.2020.107157",
-	url = "http://www.sciencedirect.com/science/article/pii/S0098135420305810",
-	author = "Philip A. Tominac and Victor M. Zavala",
+	title = {Economic properties of multi-product supply chains},
+	journal ={Comput Chem Eng},
+	pages = {107157},
+	year = {2020},
+	issn = {0098-1354},
+	doi ={https://doi.org/10.1016/j.compchemeng.2020.10715},
+	url = {http://www.sciencedirect.com/science/article/pii/S0098135420305810},
+	author = {Philip A. Tominac and Victor M. Zavala}
 }
 ```
