@@ -6,6 +6,6 @@ A supply chain modeling framework based on `JuMP` implementing the coordination 
 
 | **Documentation**                                                               | **Build Status**                                                                                | **Citation** |
 |:-------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|:--------------------------------------:|
-||[![Build Status](https://github.com/Tominapa/CoordinatedSupplyChains.jl/workflows/CI/badge.svg)](https://github.com/Tominapa/CoordinatedSupplyChains.jl/actions)[![Coverage](https://codecov.io/gh/Tominapa/CoordinatedSupplyChains.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/Tominapa/CoordinatedSupplyChains.jl)|![DOI(https://img.shields.io/badge/DOI-Elsevier-orange)](https://doi.org/10.1016/j.compchemeng.2020.107157)|
+||[![Build Status](https://github.com/Tominapa/CoordinatedSupplyChains.jl/workflows/CI/badge.svg)](https://github.com/Tominapa/CoordinatedSupplyChains.jl/actions)[![Coverage](https://codecov.io/gh/Tominapa/CoordinatedSupplyChains.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/Tominapa/CoordinatedSupplyChains.jl)|[![DOI](https://img.shields.io/badge/DOI-Elsevier-orange)](https://doi.org/10.1016/j.compchemeng.2020.107157)|
 
 
