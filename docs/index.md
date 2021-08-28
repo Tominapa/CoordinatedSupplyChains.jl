@@ -1,4 +1,4 @@
-![Logo](..CSCLogo.png)
+![Logo](Logos/CSCLogo.png)
 
 ---
 
