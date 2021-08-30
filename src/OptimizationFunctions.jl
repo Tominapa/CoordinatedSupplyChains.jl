@@ -1,7 +1,7 @@
 ################################################################################
 ### FUNCTIONS FOR SOLVING COORDINATED SUPPLY CHAIN MODELS WITH JuMP
 """
-    Output = OptimizeSSCase(A,N,P,D,S,T,L,Sets,Pars; CaseDataDirectory=pwd(), PrintModel=false, WriteReport=true, PrintOutput=true, ModelOutputFileName="_Model.txt", SolutionOutputFileName="_SolutionData.txt", PrintSpacer="*"^50)
+    Output, Stats = OptimizeSSCase(A,N,P,D,S,T,L,Sets,Pars; CaseDataDirectory=pwd(), PrintModel=false, WriteReport=true, PrintOutput=true, ModelOutputFileName="_Model.txt", SolutionOutputFileName="_SolutionData.txt", PrintSpacer="*"^50)
 
 # Arguments
 

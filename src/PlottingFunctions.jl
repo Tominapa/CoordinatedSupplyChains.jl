@@ -1,7 +1,7 @@
 ################################################################################
 ### FUNCTIONS FOR PREPACKAGED PLOTS
 """
-    SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^50)
+    SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^50, TestMode=false)
 
 # Arguments
 
@@ -17,7 +17,7 @@ PrintSpacer="*"^50: (optional keyword arg): Change the characters used to space 
 ```
 A simple network plot showing nodes, arcs, stakeholders, and product flows
 """
-function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^50)
+function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^50, TestMode=false)
     ################################################################################
     ### CHECK FOR OUTPUT DIRECTORY
     PlotFolder = "/plots"
@@ -74,10 +74,12 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
         push!(Alons,[N.lon[A.node_s[a]],N.lon[A.node_r[a]]])
         push!(Alats,[N.lat[A.node_s[a]],N.lat[A.node_r[a]]])
     end
-    plt = plot(Alons,Alats,
-        color = dlc,
-        lw = dlw,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        plt = plot(Alons,Alats,
+            color = dlc,
+            lw = dlw,
+            legend = dlb)
+    end
 
     # Arrays for node longitudes and lattitudes; these will be fed into plot()
     Nlons = []
@@ -86,12 +88,14 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
         push!(Nlons, N.lon[n])
         push!(Nlats, N.lat[n])
     end
-    scatter!(Nlons,Nlats,
-        ms = nms,
-        mc = dmc,
-        msw = dmsw,
-        msc = dmsc,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        scatter!(Nlons,Nlats,
+            ms = nms,
+            mc = dmc,
+            msw = dmsw,
+            msc = dmsc,
+            legend = dlb)
+    end
 
     ################################################################################
     ### PLOT FLOWS (SO THEY APPEAR UNDER STAKEHOLDER NODES)
@@ -105,11 +109,13 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
             end
         end
     end
-    plot!(flons,flats,
-        arrow=(:closed, 2.0),
-        color = tlc,
-        lw = tlw,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        plot!(flons,flats,
+            arrow=(:closed, 2.0),
+            color = tlc,
+            lw = tlw,
+            legend = dlb)
+    end
 
     
     ################################################################################
@@ -121,12 +127,14 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
         push!(Slons, N.lon[S.node[i]])
         push!(Slats, N.lat[S.node[i]])
     end
-    scatter!(Slons,Slats,
-        ms = sms,
-        mc = smc,
-        msw = smsw,
-        msc = smsc,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        scatter!(Slons,Slats,
+            ms = sms,
+            mc = smc,
+            msw = smsw,
+            msc = smsc,
+            legend = dlb)
+    end
 
     # Technologies
     Llons = []
@@ -135,12 +143,14 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
         push!(Llons, N.lon[L.node[l]])
         push!(Llats, N.lat[L.node[l]])
     end
-    scatter!(Llons,Llats,
-        ms = lms,
-        mc = lmc,
-        msw = lmsw,
-        msc = lmsc,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        scatter!(Llons,Llats,
+            ms = lms,
+            mc = lmc,
+            msw = lmsw,
+            msc = lmsc,
+            legend = dlb)
+    end
 
     # Consumers
     Dlons = []
@@ -149,19 +159,25 @@ function SSNetworkPlot(A,N,P,D,S,L,f; CaseDataDirectory=pwd(), PrintSpacer="*"^5
         push!(Dlons, N.lon[D.node[j]])
         push!(Dlats, N.lat[D.node[j]])
     end
-    scatter!(Dlons,Dlats,
-        ms = cms,
-        mc = cmc,
-        msw = cmsw,
-        msc = cmsc,
-        legend = dlb)
+    if !TestMode # skip plots during testing
+        scatter!(Dlons,Dlats,
+            ms = cms,
+            mc = cmc,
+            msw = cmsw,
+            msc = cmsc,
+            legend = dlb)
+    end
     
     # Update settings
-    plot!(size=(fig_w,fig_h),lims=:round)
+    if !TestMode # skip plots during testing
+        plot!(size=(fig_w,fig_h),lims=:round)
+    end
 
     ################################################################################
     ### SAVE PLOT
-    savefig(plt,CaseDataDirectory*PlotFolder*"/NetworkPlot.png")
+    if !TestMode # skip plots during testing
+        savefig(plt,CaseDataDirectory*PlotFolder*"/NetworkPlot.png")
+    end
 
     ################################################################################
     ### END OF CODE ###

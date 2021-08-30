@@ -12,6 +12,7 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 
 [compat]
 PGFPlotsX = "1"
+JuMP = "0.21"
 julia = "1"
 
 [extras]
