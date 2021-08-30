@@ -6,10 +6,10 @@ jobs:
   test:
     name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
     runs-on: ${{ matrix.os }}
-    env:
-      GKS_ENCODING: "utf8"
-      GKSwstype: "100"
-      PLOTS_TEST: "true"
+    # env:
+    #   GKS_ENCODING: "utf8"
+    #   GKSwstype: "100"
+    #   PLOTS_TEST: "true"
     strategy:
       fail-fast: false
       matrix:
