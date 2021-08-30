@@ -1,3 +1,8 @@
 using Documenter, CoordinatedSupplyChains
 
-makedocs(sitename="Coordinated Supply Chains Documentation")
+makedocs(sitename="CoordinatedSupplyChains.jl Documentation",
+	pages = [
+        	"Home" => "index.md",
+        	"Tutorials" => "tutorial.md"
+        	]
+)
