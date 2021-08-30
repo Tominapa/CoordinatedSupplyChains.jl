@@ -37,8 +37,8 @@ jobs:
             ${{ runner.os }}-test-${{ env.cache-name }}-
             ${{ runner.os }}-test-
             ${{ runner.os }}-
-      - name: Install plotting dependencies # For enabling GR.jl (used by Plots.jl)
-        run: sudo apt-get install -y qt5-default
+      #- name: Install plotting dependencies # For enabling GR.jl (used by Plots.jl)
+      #  run: sudo apt-get install -y qt5-default
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
