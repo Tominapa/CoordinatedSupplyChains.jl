@@ -6,3 +6,7 @@ makedocs(sitename="CoordinatedSupplyChains.jl Documentation",
         	"Tutorials" => "tutorial.md"
         	]
 )
+
+deploydocs(
+    repo = "github.com/Tominapa/CoordinatedSupplyChains.jl.git",
+)
