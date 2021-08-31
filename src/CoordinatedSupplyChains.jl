@@ -6,8 +6,8 @@ using DelimitedFiles
 using JuMP
 using Clp
 using Plots
-#using PGFPlotsX
-#pgfplotsx()
+using PGFPlotsX
+pgfplotsx()
 
 ################################################################################
 ### EXPORT LIST
