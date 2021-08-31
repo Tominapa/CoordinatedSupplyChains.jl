@@ -15,7 +15,9 @@ Coordination is a powerful market management system used in electrical grid mana
 
 ## Documentation
 
-In development; your patience is appreciated.
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://tominapa.github.io/CoordinatedSupplyChains.jl/dev)
+
+Documentation includes an overview of the software, instructions for setting up the required data files, and guides that will help you get stared.
 
 ## Citing
 [![DOI](https://img.shields.io/badge/DOI-Elsevier-orange)](https://doi.org/10.1016/j.compchemeng.2020.107157)
