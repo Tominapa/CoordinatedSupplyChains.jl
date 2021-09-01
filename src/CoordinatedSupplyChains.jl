@@ -7,7 +7,7 @@ using JuMP
 using Clp
 using Plots
 #using PGFPlotsX
-pgfplotsx()
+#pgfplotsx()
 
 ################################################################################
 ### EXPORT LIST
