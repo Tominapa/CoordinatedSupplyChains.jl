@@ -1,6 +1,3 @@
-
-
-
 ![Logo](assets/CSCLogo.png)
 
 ---
