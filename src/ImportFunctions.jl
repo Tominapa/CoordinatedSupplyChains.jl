@@ -39,7 +39,7 @@ Files must be formatted as .csv (Comma Separated Values) delimited with the Veti
         2. Arc first node: a Node ID included in node_data.csv
         3. Arc second node: a Node ID included in node_data.csv
         4. Arc capacity: a number representing the capacity of the arc; units (tonne)
-        5. Custom length (optional): A number representing the length of the arc; units: (km); used only if the CustomLengths paramter is set true; >=0
+        5. Custom length (optional): A number representing the length of the arc; units: (km); used only if the CustomLengths parameter is set true; >=0
     node_data.csv:
         1. Node ID: a unique string ID for the node, prefereably of the form N01, N02, ...; no spaces allowed!
         2. Node Name: a string with detailed information about the node; spaces allowed

@@ -209,6 +209,7 @@ function FilePrint(Variable,OrderedIndexList,filename;Header="*"^50,DataName="",
     end
 end
 
+#=
 function RawDataPrint(data,filename;Header="*"^50,DataName="")
     """
     Prints raw data to file for record-keeping purposes;
@@ -230,3 +231,4 @@ function RawDataPrint(data,filename;Header="*"^50,DataName="")
         print(filename,data[i,:])
     end
 end
+=#
