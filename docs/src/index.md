@@ -17,9 +17,8 @@
 - `JuMP`
 - `Clp`
 - `Plots`
-- `PGFPlotsX`
 
-`JuMP` provides the modeling facility for the coordination problem, and uses the `Clp` solver, which is open-source and does not require a license. `Plots` is used to produce a basic network diagram, with `PGFPlotsX` providing the plotting backend software (with good default settings).
+`JuMP` provides the modeling facility for the coordination problem, and uses the `Clp` solver, which is open-source and does not require a license. `Plots` is used to produce a basic network diagram.
 
 
 ## Citing
