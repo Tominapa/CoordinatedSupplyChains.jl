@@ -36,3 +36,7 @@ If `CoordinatedSupplyChains.jl` is useful in your research, we appreciate your c
 	author = {Philip A. Tominac and Victor M. Zavala}
 }
 ```
+
+## Acknowledgements
+
+We acknowledge support from the U.S. Department of Agriculture (grant 2017-67003-26055) and partial funding from the National Science Foundation (under grant CBET-1604374).xs
