@@ -39,4 +39,4 @@ If `CoordinatedSupplyChains.jl` is useful in your research, we appreciate your c
 
 ## Acknowledgements
 
-We acknowledge support from the U.S. Department of Agriculture (grant 2017-67003-26055) and partial funding from the National Science Foundation (under grant CBET-1604374).xs
+We acknowledge support from the U.S. Department of Agriculture (grant 2017-67003-26055) and partial funding from the National Science Foundation (under grant CBET-1604374).
