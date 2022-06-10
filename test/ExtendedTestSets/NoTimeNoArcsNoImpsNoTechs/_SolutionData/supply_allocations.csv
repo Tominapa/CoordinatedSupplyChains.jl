@@ -1,0 +1,9 @@
+Supply ID,Supply node,Supply time,Supply Product,Supply allocation,Supply Profit
+G1,N1,T0,A,1.0,3.0
+G2,N1,T0,A,1.0,2.0
+G3,N1,T0,A,1.0,1.0
+G4,N1,T0,A,1.0,0.0
+G5,N1,T0,A,0.0,-0.0
+G6,N1,T0,A,0.0,-0.0
+G7,N1,T0,A,0.0,-0.0
+G8,N1,T0,A,0.0,-0.0

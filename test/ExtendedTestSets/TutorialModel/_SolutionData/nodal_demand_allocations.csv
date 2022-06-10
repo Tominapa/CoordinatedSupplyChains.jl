@@ -1,0 +1,19 @@
+Node,Time point,Product,Total Demand
+N1,T1,Almonds,0.2
+N1,T2,Almonds,0.2
+N1,T3,Beef,0.2
+N1,T4,Beef,0.2
+N1,T5,Beef,0.2
+N2,T3,Beef,0.4
+N2,T4,Beef,0.4
+N2,T5,Beef,0.4
+N3,T1,IceCream,0.19936
+N3,T1,Almonds,0.2
+N3,T2,IceCream,0.19936
+N3,T2,Almonds,0.2
+N3,T3,IceCream,0.19936
+N3,T3,Beef,0.4
+N3,T4,IceCream,0.19936
+N3,T4,Beef,0.4
+N3,T5,IceCream,0.19936
+N3,T5,Beef,0.4

@@ -1,7 +1,0 @@
-# 1. Tech ID|2. Tech Outputs|3. Tech Inputs|4. Output stoich|5. Input stoich|6. Reference product|7. Operating cost|8. Capacity|9. Name
-T01|P06|P05|0.75|1.0|P05|100.0|1000|tech
-T02|P07|P01,P06|0.4|1.0,0.5|P01|100.0|1000|tech
-T03|P08|P02,P06|0.6|1.0,0.2|P02|100.0|1000|tech
-T04|P09|P03,P06|0.5|1.0,1.3|P03|100.0|1000|tech
-T05|P10|P04,P06|0.8|1.0,1.0|P04|100.0|1000|tech
-

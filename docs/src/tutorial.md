@@ -1,66 +1,62 @@
 ## Overview
 
-'CoordinatedSupplyChains.jl' is designed to automate data processing and model building to help you solve coordinated supply chain problems quickly and easily. The software has been designed so that your workflow will consist primarily of formatting the input data files containing the information about a supply chain problem. Once this is complete, you can point 'CoordinatedSupplyChains.jl' to your data and run the code to generate results.
+`CoordinatedSupplyChains.jl` is a user-friendly tool designed to give you access to a powerful supply chain coordination model. `CoordinatedSupplyChains.jl` handles the data processing and model building so that you can quickly solve problems and generate results.
+
+Putting together a supply chain problem is a matter of populating comma-separated-values files with the necessary definitions of the supply chain structure and the stakeholders participating in it. Once this is complete, you can point `CoordinatedSupplyChains.jl` to your data and run the code to generate results.
 
 ## Coordination Abstraction
 
-'CoordinatedSupplyChains.jl' is based on the coordination model by [Tominac & Zavala](https://doi.org/10.1016/j.compchemeng.2020.107157). In this work, a supply chain is conceptualized as a market operating under a coordination system managed by in Independent System Operator (ISO). Coordination proceeds much like an auction, the ISO collects bidding information from supply chain stakeholders, and determines transactions which maximize the combined total profit of all stakeholders. In this framework, every stakeholder in the supply chain is categorized into one of four classes: a supplier, a consumer, a technology (or transformation) provider, or a transportation provider. Briefly, each of these stakeholders is responsible for a specific task in a supply chain.
-- Suppliers sell products
-- Consumers buy products
-- Technology providers convert one set of products into a different set of products
-- Transportation providers move products between supply chain locations.
+`CoordinatedSupplyChains.jl` is based on the coordination model by [Tominac & Zavala](https://doi.org/10.1016/j.compchemeng.2020.107157) and its more recent iteration described by [Tominac, Zhang, & Zavala](https://www.sciencedirect.com/science/article/pii/S0098135422000114).
 
-Each of these stakeholders is an independent profit-maximizing entity in a supply chain, meaning that it seeks to maximize its profits independently of other supply chain stakeholders. Each stakeholder has associated with it a **capacity** parameter indicating the extent to which it will serve in the supply chain, as well as a **service bid** indicating how much the stakeholder pays or demands to be paid for its service. 'CoordinatedSupplyChains.jl' tracks the **profit** accrued by each stakeholder. Profits are a function of supply chain **allocations** and **prices** determined by the ISO. The term allocation is used to represent the amount of a stakeholder's capacity that it wins in the coordination process.
-- A supplier's allocation is the amount of a product that it is able to sell
-- A consumer's allocation is the amount of a product that it is able to buy
-- A technology provider's allocation is the amount of a product that is able to process
-- A transportation provider's allocation is the amount of a product it is able to move
+The `CoordinatedSupplyChains.jl` abstraction conceptualizes a supply chain as a market operating under a coordination system, like an auction where each stakeholder is bidding its preferred buying rate, its selling rate, or its service rate. This coordination system is managed by a coordinator, an independent operator who does not have a stake in the market, but whose goal is to maximize the total profit of the market. The stakeholders pass their bidding information to the coordinator, who resolves the market by setting product and service prices. As a result, transactions of products and services are allocated to stakeholders. The coordination system has a number of useful theoretical guarantees related to the coordinator's price setting practices and the implications for supply chain stakeholders.
+1. No stakeholder loses money as a result of participation in the coordination system. A stakeholder either participates in the market with a positive allocation and nonnegative profit, or it does not participate in the market at all. Market participation is never coerced.
+2. The coordinator's prices respect participating stakeholder bids. This is the mechanism by which nonnegative profits are guaranteed.
+3. Coordination is efficient; there is no money lost to the coordinator or from the supply chain as a result of operating under the coordination system. In other words, money balances within a coordinated supply chain.
 
-Like an auction, stakeholders can only expect to receive positive allocations if they bid competitively in the coordination system. For example, a supplier can bid no more than a consumer is willing to pay, or else there is no transaction that the ISO can set up that will generate profit. Similarly, if a consumer and supplier are separated by distance, or a consumer desires a product that must be processed by some technology provider, then the consumer must be willing to bid higher than the combined cost of all the other stakeholders' bids. Within this framework, it is logically consistent for consumers to bid a negative amount (i.e., demanding to be paid to consume a product) and for suppliers to bid a negative amount (i.e., paying to have a product taken away). However, technology and transportation providers are expected to have positive bids.
+For a complete review of the auction system, please refer to the associated references.
 
-## Graph Structure
 
-'CoordinatedSupplyChains.jl' uses a graph representation for supply chains consisting of nodes (representing geographical locations) and arcs (representing available pathways between nodes). Stakeholders are connected to the supply chain by association with a graph node (in the case of suppliers, consumers, and technology providers) or association with an arc (for transportation providers). This layering of attributes informs the structure of the supply chain, and helps manage the complexity required in the input data files. The next section will show you how to structure input data.
+## Supply Chain Representation
+
+`CoordinatedSupplyChains.jl` uses a compact graph representation to describe a supply chain. The graph is defined by:
+- A set of geographical (location) nodes
+- A set of time points
+- A set of spatiotemporal arcs that move products through space and time
+
+Of interest within a coordinated supply chain are
+- A set of products to be transacted
+- A set of environmental impacts associated with the economic activities in the supply chain
+
+Transacting products and providing services are the supply chain stakeholders. These are divided into five distinct categories, namely
+- suppliers, who sell products
+- consumers, who purchase products
+- transportation providers, who move products between spatiotemporal nodes in the supply chain graph
+- technology providers, who transform products from one form to another
+- environmental impact consumers, who absorb the environmental impacts emitted by other stakeholders
+
+With this graph abstraction and the five stakeholder categories, it is possible to build representations of complex supply chain systems including product processing and sustainability metrics. 
+
 
 ## Data Format
 
-A coordinated supply chain problem is represented by seven files containing all the required information that 'CoordinatedSupplyChains.jl' needs to construct and solve a problem. These files have mandatory names, are all of the .csv type, and use the vertical bar ("|") character as the delimiter by default:
-- product_data.csv
-- node_data.csv
-- arc_data.csv
-- supply_data.csv
-- demand_data.csv
-- technology_data.csv
-- techsite_data.csv
+Any coordinated supply chain problem is defined by data detailing the sets of nodes, time points, arcs, products, impacts, and stakeholders. This data is divided into ten specially named .csv files. These are comma-separated by default, so any convenient .csv editor (text editor or spreadsheet software) will work. The file name rconventions are as follows:
+- csvdata_node.csv
+- csvdata_time.csv (optional)
+- csvdata_arcs.csv (optional)
+- csvdata_product.csv
+- csvdata_impact.csv (optional)
+- csvdata_demand.csv
+- csvdata_supply.csv
+- csvdata_env.csv (optional)
+- csvdata_tech.csv. (optional)
+- csvdata_techmap.csv (optional)
 
-A working example will be used to illustrate how these files are structured. You can copy each of the seven files to replicate the example on your own.
+Note: not every supply chain problem requires every feature built into `CoordinatedSupplyChains.jl` and as such, certain files are optional. For example, if solving a steady-state supply chain problem, the csvdata_time.csv file may be excluded, and the package will simply assign variables a time index `T0`. Similarly, you may wish to build supply chain problems with no arcs; the package will accommodate this as well. For models with no sustainability focus, the impact and environmental stakeholder data folders may be excluded. Similarly, if there are no technologies, then the technology and mapping files may be excluded. No keywords or arguments are required; the package is programmed to check for the requisite files and proceed accordingly. The minimal `CoordinatedSupplyChains.jl` model must include one or more nodes, products, suppliers, and consumers. These four files are thus non-optional inputs.
 
-### product_data.csv
+A working example will be used to illustrate how these files are structured. You can copy each of the ten files to replicate the example on your own.
 
-Data defining products is arranged as follows, with columns numbered as follows
-1. Product ID: a unique string ID for the product, preferably of the form P01, P02, ...; no spaces allowed!
-2. Product name: a string with detailed information about the product; spaces allowed
-3. Transportation cost: the transport cost for the product; units: (USD.tonne^-1.km^-1); >0
 
-The demonstration example file looks like this (as raw text; a spreadsheet program will give you a different view)
-
-```
-# 1. Product no.|2. Product name|3. Transportation cost (USD.tonne^-1.km^-1)
-P01|A|10
-P02|B|10
-P03|C|10
-P04|D|10
-P05|E|10
-P06|F|10
-P07|G|10
-P08|H|10
-P09|I|10
-P10|J|10
-```
-
-Here, you might notice that the product naming convention adopted is just alphabetical names. These might not be helpful for larger problems, but for our demo, they will be fine. Additionally, note that every product has an identical transportation cost: 10 USD per km per tonne (the spelling "tonne" is used to indicate metric tonnes). The number sign ("#") beginning the first line of the file indicates that this line is a comment, and it will not be processed as part of the code. You can leave this heading line in your own files as a reminder of the content and ordering.
-
-### node_data.csv
+### csvdata_node.csv
 
 Node data are structured as follows
 1. Node ID: a unique string ID for the node, preferably of the form N01, N02, ...; no spaces allowed!
@@ -70,338 +66,526 @@ Node data are structured as follows
 
 Our example uses the following node data
 ```
-# 1. Node ID| 2. Node Name| 3. Node longitude| 4. Node latitude
-N00|Node 00|-80|40
-N01|Node 01|-79.91333333|40.32333333
-N02|Node 02|-79.69333333|40.17666667
-N03|Node 03|-79.67666667|39.91333333
-N04|Node 04|-79.82333333|39.69333333
-N05|Node 05|-80.08666667|39.67666667
-N06|Node 06|-80.30666667|39.82333333
-N07|Node 07|-80.32333333|40.08666667
-N08|Node 08|-80.17666667|40.30666667
-N09|Node 09|-80|40.66666667
-N10|Node 10|-79.5|40.5
-N11|Node 11|-79.33333333|40
-N12|Node 12|-79.5|39.5
-N13|Node 13|-80|39.33333333
-N14|Node 14|-80.5|39.5
-N15|Node 15|-80.66666667|40
-N16|Node 16|-80.5|40.5
-N17|Node 17|-80.26|40.96666667
-N18|Node 18|-79.47|40.92
-N19|Node 19|-79.03333333|40.26
-N20|Node 20|-79.08|39.47
-N21|Node 21|-79.74|39.03333333
-N22|Node 22|-80.53|39.08
-N23|Node 23|-80.96666667|39.74
-N24|Node 24|-80.92|40.53
+# 1. Node ID, 2. Node Name, 3. Node longitude, 4. Node latitude
+N1,Madison-WI,-89.4,43.1
+N2,Austin-TX,-97.7,30.3
+N3,Los Angeles-CA,-118.2,34.0
 ```
 
-You may need to careful when looking for longitude/latitude data; conventions can differ. However, `CoordinatedSupplyChains.jl` uses the same conventions as Google maps.
+You may need to be careful when looking for longitude/latitude data; conventions can differ. However, `CoordinatedSupplyChains.jl` uses the same convention as Google maps, with negative longitude.
 
-### arc_data.csv
+
+### csvdata_time.csv
+
+Time data are structure as follows
+1. Time point ID: a unique string ID for the time point; no spaces allowed
+2. Time point duration: A number representing the duration of the time point; used for calculating temporal transportation costs
+
+```
+# 1. Time point ID,2. Duration
+T1,1.0
+T2,1.0
+T3,1.0
+T4,1.0
+T5,1.0
+```
+
+In this example, we use five time points of equal duration; this is not a requirement. Duration can vary,  and any time-dependent parameters will reflect the duration.
+
+
+### csvdata_product.csv
+
+Data defining products is arranged with columns numbered as follows
+1. Product ID: a unique string ID for the product; no spaces allowed!
+2. Product name: a string with detailed information about the product; spaces allowed
+3. Transportation cost (distance): the transport cost to move the product over distance; needs to be positive to prevent transportation cycles
+4. Transportation cost (time): the cost to store, or move the product through time
+
+The demo product file is
+```
+# 1. Product no.,2. Product name,3. Transportation cost (distance) (USD.tonne^-1.km^-1),4. Transportation cost (time) (USD.tonne^-1.h^-1)
+Milk,Milk,0.30,0.20
+IceCream,Ice cream - tonne,0.30,0.20
+Beef,Beef - boneless sirloin steak - USDA choice - tonne,0.25,0.05
+Almonds,Almonds - shelled unseasoned - tonne,0.20,0.15
+```
+
+Product names have been used as IDs, with a more detailed description provided in column 2. Transportation costs in columns 3 and 4 are included with units provided in the column headers, as good record keeping practice. It is on the user to keep track of units and ensure they are. consistent.
+
+### csvdata_impact.csv
+
+Data for environmental impact types are formatted as follows
+1. Impact ID: a unique string ID for the impact; no spaces allowed!
+2. Impact alias: a string with detailed information about the impact measure
+3. Transportation coefficient (distance): Some environmental impacts are associated with transportation; the emission coefficient per unit distance is recorded here
+4. Storage coefficient (time): Some environmental impacts are associated with storage; the emission coefficient per unit time is recorded here
+
+For our demo, we will use the following
+```
+# 1. Impact ID, 2. Impact alias, 3. Transportation coefficient (impact unit per tonne.km), 4. Storage coefficient (impact unit per tonne.h)
+Phosphorus,phosphorus equivalent eutrophication potential - tonne P-eq,0.0,0.0
+CO2,Carbon dioxide emissions - tonne CO2-eq,0.01,0.001
+WaterUse,Water use - tonne,0.0,0.0
+```
+
+
+### csvdata_arcs.csv
 
 Arc data are structured as follows
 1. Arc ID: a unique string ID for the arc, prefereably of the form A01, A02, ...; no spaces allowed!
 2. Arc first node: a Node ID included in node_data.csv
 3. Arc second node: a Node ID included in node_data.csv
-4. Arc capacity: a number representing the capacity of the arc; units (tonne)
+4. Arc capacity: a vector of numbers representing the product capacity of the arc; units (tonne)
 5. Custom length (optional): A number representing the length of the arc; units: (km); used only if the CustomLengths parameter is set true; >=0
 
 Our example has the following arcs
 ```
-# 1. Arc ID| 2. Arc first node| 3. Arc second node| 4. Arc capacity| 5. Custom length (optional)
-A01|N00|N01|100000|1
-A02|N00|N02|100000|1
-A03|N00|N03|100000|1
-A04|N00|N04|100000|1
-A05|N00|N05|100000|1
-A06|N00|N06|100000|1
-A07|N00|N07|100000|1
-A08|N00|N08|100000|1
-A09|N01|N09|100000|1
-A10|N02|N10|100000|1
-A11|N03|N11|100000|1
-A12|N04|N12|100000|1
-A13|N05|N13|100000|1
-A14|N06|N14|100000|1
-A15|N07|N15|100000|1
-A16|N08|N16|100000|1
-A17|N09|N17|100000|1
-A18|N10|N18|100000|1
-A19|N11|N19|100000|1
-A20|N12|N20|100000|1
-A21|N13|N21|100000|1
-A22|N14|N22|100000|1
-A23|N15|N23|100000|1
-A24|N16|N24|100000|1
+# 1. Arc ID, 2. Arc first node, 3. Arc second node, 4. Arc capacity, 5. Arc Length
+A1,N1,N2,1E6|1E6|1E6|1E6,
+A2,N2,N3,1E6|1E6|1E6|1E6,
+A3,N3,N1,1E6|1E6|1E6|1E6,
 ```
 
-This is the first data file that depends on another; you will notice that arc_data.csv is built based on data in node_data.csv. Be sure that the node names entered here match those in the other file. The CustomLengths field is populated in this example, but it is not used. We could equivalently leave the field blank. Custom arcs lengths are useful if you already have access to distance data. Note that arcs only need to be defined in one direction (e.g., from node N00 to N01) and the software will add the reverse arcs automatically.
+This is the first data file that depends on others; csvdata_arcs.csv is built based on data in csvdata_node.csv and csvdata_product.csv. The CustomLengths field is unpopulated in this example because it will not be used. We could populate ourselves, if we knew specific route distances. Custom arcs lengths are useful if you already have access to distance data. In this example, we will let the software calculate great circle distances between nodes connected by arcs. The built-in great-circle distance function returns arc lengths in kilometers.
 
-### supply_data.csv
+Note that arcs only need to be defined in one direction; e.g., from node N1 to N2 will allow products to flow from N1 to N2, and from N2 to N1.
+
+Arc product capacities are provided as a vector, but note that product order will follow the order of products in csvdata_product.csv file.
+
+
+### csvdata_supply.csv
 
 Supplier data are structured as follows
-1. Supply ID: a unique string ID for the supply, preferably of the form S01, S02, ...; no spaces allowed!
-2. Node: a Node ID included in node_data.csv
-3. Product: a Product ID included in product_data.csv
-4. Bid: a number representing the supplier bid for a product; units: (USD.tonne^-1); any real number
-5. Capacity: a number representing the maximum amount supplied; units (tonne); >0
-6. Notes: any notes about this supply instance; spaces allowed
+1. Supply ID: a unique string ID for the supplier; no spaces allowed!
+2. Node: a Node ID included in csvdata_node.csv, where the supplier is located
+3. Time: a Time point ID included in csvdata_time.csv, when the supply is available
+4. Product: a Product ID included in csvdata_product.csv that the supplier will offer for sale
+5. Bid: a number representing the supplier bid for a product; a real number
+6. Capacity: a number representing the maximum amount supplied;  a positive number
+7. Emissions: a vector of impact IDs from csvdata_impact representing the impacts associated with supplying the product
+8. Emissions coefficients: a vector of real numbers representing the per unit emissions associated with supplying the product
 
-Our example has five suppliers
+The demo supply file
 ```
-# 1.Supply reference no.| 2.Node| 3.Product| 4.Bid| 5.Capacity| 6.Notes
-S01|N00|P05|10.0|1000|note
-S02|N17|P01|100.0|100|note
-S03|N19|P02|100.0|100|note
-S04|N21|P03|100.0|100|note
-S05|N23|P04|100.0|100|note
+# 1.Supply reference no., 2.Node, 3.Time, 4.Product, 5.Bid, 6.Capacity, 7. Emissions, 8. Emissions coefficients unit per tonne product consumed
+G01,N1,T1,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G02,N1,T2,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G03,N1,T3,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G04,N3,T4,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G05,N3,T5,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G06,N2,T3,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G07,N2,T4,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G08,N2,T5,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G09,N3,T1,Almonds,6018.01,1.0,Phosphorus|CO2|WaterUse,0.144|2.009|12984.0
+G10,N3,T2,Almonds,6018.01,1.0,Phosphorus|CO2|WaterUse,0.144|2.009|12984.0
 ```
 
-Note that this file depends of both product_data.csv and node_data.csv, and adds parameters specific to suppliers (their bid and allocation capacity).
 
 ### demand_data.csv
 
 Consumer data are structured as follows
-1. Demand ID: a unique string ID for the demand, prefereably of the form D01, D02, ...; no spaces allowed!
-2. Node: a Node ID included in node_data.csv
-3. Product: a Product ID included in product_data.csv
-4. Bid: a number representing the consumer bid for a product; units: (USD.tonne^-1); any real number
-5. Capacity: a number representing the maximum amount demanded; units (tonne); >0
-6. Notes: any notes about this demand instance; spaces allowed
+1. Demand ID: a unique string ID for the consumer; no spaces allowed!
+2. Node: a Node ID included in csvdata_node.csv, where the consumer is located
+3. Time: a Time point ID included in csvdata_time.csv, when the consumer is available
+4. Product: a Product ID included in csvdata_product.csv that the consumer will offer to buy
+5. Bid: a number representing the consumer bid for a product; a real number
+6. Capacity: a number representing the maximum amount consumed; a positive number
+7. Emissions: a vector of impact IDs from csvdata_impact representing the impacts associated with consuming the product
+8. Emissions coefficients: a vector of real numbers representing the per unit emissions associated with consuming the product
 
 Our example has five consumers
 ```
-# 1. Demand reference no.| 2. Node| 3. Product| 4. Bid| 5. Capacity| 6. Notes
-D01|N18|P07|10000.0|100|note
-D02|N20|P08|10000.0|100|note
-D03|N22|P09|10000.0|100|note
-D04|N24|P10|10000.0|100|note
-D05|N00|P05|10.01|100|note
+# 1.Demand reference no., 2.Node, 3.Time, 4.Product, 5.Bid, 6.Capacity, 7. Emissions, 8. Emissions coefficients unit per tonne product consumed
+D01,N1,T1,IceCream,30000.00,0.3,,
+D02,N1,T2,IceCream,30000.00,0.3,,
+D03,N1,T3,IceCream,30000.00,0.3,,
+D04,N1,T4,IceCream,30000.00,0.3,,
+D05,N1,T5,IceCream,30000.00,0.3,,
+D06,N2,T1,IceCream,30000.00,0.3,,
+D07,N2,T2,IceCream,30000.00,0.3,,
+D08,N2,T3,IceCream,30000.00,0.3,,
+D09,N2,T4,IceCream,30000.00,0.3,,
+D10,N2,T5,IceCream,30000.00,0.3,,
+D11,N3,T1,IceCream,35000.00,0.4,,
+D12,N3,T2,IceCream,35000.00,0.4,,
+D13,N3,T3,IceCream,35000.00,0.4,,
+D14,N3,T4,IceCream,35000.00,0.4,,
+D15,N3,T5,IceCream,35000.00,0.4,,
+D16,N1,T1,Almonds,6800,0.2,,
+D17,N1,T2,Almonds,6800,0.2,,
+D18,N2,T1,Almonds,6020,0.6,,
+D19,N2,T2,Almonds,6020,0.6,,
+D20,N3,T1,Almonds,6800,0.2,,
+D21,N3,T2,Almonds,6800,0.2,,
+D22,N1,T3,Beef,25000,0.2,,
+D23,N1,T4,Beef,25000,0.2,,
+D24,N1,T5,Beef,25000,0.2,,
+D25,N2,T3,Beef,24000,0.4,,
+D26,N2,T4,Beef,24000,0.4,,
+D27,N2,T5,Beef,24000,0.4,,
+D28,N3,T3,Beef,25000,0.4,,
+D29,N3,T4,Beef,25000,0.4,,
+D30,N3,T5,Beef,25000,0.4,,
 ```
+
+
+###csvdata_env.csv
+
+This data file defines environmental impact consumption and policy, and consists of
+1. Environmental. stakeholder ID: a unique ID for the environmental stakeholder
+2. Node: a Node ID included in csvdata_node.csv, where the environmental stakeholder is located
+3. Time: a Time point ID included in csvdata_time.csv, when the environmental stakeholder is available
+4. Impact: an Impact ID included in csvdata_impact.csv that the environmental stakeholder will coonsumer
+5. Bid: a number representing the environmental stakeholder bid for a product; a real number
+6. Capacity: a number representing the maximum amount consumed; a positive number
+
+Environmental stakeholder data for the demo
+```
+# 1. Env. stakeholder reference, 2. Node, 3. Time, 4. Impact, 5. Bid (USD/impact unit), 6. Capacity
+V01,N1,T1,Phosphorus,0,Inf
+V02,N1,T2,Phosphorus,0,Inf
+V03,N1,T3,Phosphorus,0,Inf
+V04,N1,T4,Phosphorus,0,Inf
+V05,N1,T5,Phosphorus,0,Inf
+V06,N2,T1,Phosphorus,0,Inf
+V07,N2,T2,Phosphorus,0,Inf
+V08,N2,T3,Phosphorus,0,Inf
+V09,N2,T4,Phosphorus,0,Inf
+V10,N2,T5,Phosphorus,0,Inf
+V11,N3,T1,Phosphorus,0,Inf
+V12,N3,T2,Phosphorus,0,Inf
+V13,N3,T3,Phosphorus,0,Inf
+V14,N3,T4,Phosphorus,0,Inf
+V15,N3,T5,Phosphorus,0,Inf
+V16,N1,T1,CO2,0,Inf
+V17,N1,T2,CO2,0,Inf
+V18,N1,T3,CO2,0,Inf
+V19,N1,T4,CO2,0,Inf
+V20,N1,T5,CO2,0,Inf
+V21,N2,T1,CO2,0,Inf
+V22,N2,T2,CO2,0,Inf
+V23,N2,T3,CO2,0,Inf
+V24,N2,T4,CO2,0,Inf
+V25,N2,T5,CO2,0,Inf
+V26,N3,T1,CO2,0,Inf
+V27,N3,T2,CO2,0,Inf
+V28,N3,T3,CO2,0,Inf
+V29,N3,T4,CO2,0,Inf
+V30,N3,T5,CO2,0,Inf
+V31,N1,T1,WaterUse,0,Inf
+V32,N1,T2,WaterUse,0,Inf
+V33,N1,T3,WaterUse,0,Inf
+V34,N1,T4,WaterUse,0,Inf
+V35,N1,T5,WaterUse,0,Inf
+V36,N2,T1,WaterUse,0,Inf
+V37,N2,T2,WaterUse,0,Inf
+V38,N2,T3,WaterUse,0,Inf
+V39,N2,T4,WaterUse,0,Inf
+V40,N2,T5,WaterUse,0,Inf
+V41,N3,T1,WaterUse,0,Inf
+V42,N3,T2,WaterUse,0,Inf
+V43,N3,T3,WaterUse,0,Inf
+V44,N3,T4,WaterUse,0,Inf
+V45,N3,T5,WaterUse,0,Inf
+```
+
 
 ### technology_data.csv
 
 Technology data are structures as follows. Pay attention to these definitions; technology data are the most complex to set up.
-1. Tech ID: a unique string ID for the technology, prefereably of the form M01, M02, ...; no spaces allowed!
-2. Tech Outputs: a comma-delimited list of Product IDs included in product_data.csv; e.g., |P05,P06| (if single product no commas required)
-3. Tech Inputs: a comma-delimited list of Product IDs included in product_data.csv; e.g., |P01,P02,P04| (if single product no commas required)
-4. Output Yield: a comma-delimited list of yield parameters (>0) the same length as "Tech Outputs"; e.g., |0.4,0.3,0.6|
-5. Input Yield: a comma-delimited list of yield parameters (>0) the same length as "Tech Inputs"; e.g., |1.0,0.7,0.6| - one of these MUST be 1.0! see 6. Reference Product
-6. Reference product: a Product ID included in product_data.csv; this is used as the basis for the technology, and its yield coefficient in 5. Input Yield MUST be 1.0.
-7. Bid: a number representing the technology bid for a product; units: (USD.tonne^-1 of reference product); >0
-8. Capacity: a number representing the maximum amount of reference product processed; units (tonne); >0
-9. Name: a string with detailed information about the technology; spaces allowed
+1. Tech ID: a unique string ID for the technology, no spaces allowed!
+2. Tech Outputs: a vertical bar-delimited list of Product IDs included in csvdata_product.csv; e.g., ",P05|P06,"
+3. Tech Inputs: a vertical bar-delimited list of Product IDs included in csvdata_product.csv; e.g., ",P01|P02|P04,"
+4. Tech Impacts: a vertical bar-delimited list of Impact IDs included in csvdata_impact.csv; e.g., ",GWP|NH3,"
+5. Output Yield: a vertical bar-delimited list of yield parameters (positive) the same length as "Tech Outputs"; e.g., "|0.4|0.3|0.6|"
+6. Input Yield: a vertical bar-delimited list of yield parameters (positive) the same length as "Tech Inputs"; e.g., ",1.0|0.7|0.6,"- one of these MUST be 1.0! see 6. Reference Product
+7. Impact Yield: a vertical bar-delimited list of impact parameters (positive) the same length as "Tech Impacts"; e.g., ",0.045|0.0033|0.01,"
+8. Reference product: a Product ID included in csvdata_product.csv; this is used as the basis for the technology, and its yield coefficient in 5. Input Yield MUST be 1.0.
+9. Bid: a number representing the technology bid for a product; positive
+10. Capacity: a number representing the maximum amount of reference product processed; positive
+11. Name: a string with detailed information about the technology; spaces allowed
 
 The technology data in our example are as follows
 ```
-# 1. Tech ID|2. Tech Outputs|3. Tech Inputs|4. Output stoich|5. Input stoich|6. Reference product|7. Operating cost|8. Capacity|9. Name
-T01|P06|P05|0.75|1.0|P05|100.0|1000|tech
-T02|P07|P01,P06|0.4|1.0,0.5|P01|100.0|1000|tech
-T03|P08|P02,P06|0.6|1.0,0.2|P02|100.0|1000|tech
-T04|P09|P03,P06|0.5|1.0,1.3|P03|100.0|1000|tech
-T05|P10|P04,P06|0.8|1.0,1.0|P04|100.0|1000|tech
+# 1. Tech ID,2. Tech Outputs,3. Tech Inputs,4. Tech Impacts,5. Output stoich,6. Input stoich,7. Impact stoich,8. Reference product,9. Operating bid (USD/tonne),10. Capacity,11. alias
+M1,IceCream,Milk,Phosphorus|CO2|WaterUse,0.178,1.0,0.00065|3.94|2050.0,Milk,3861.11,Inf,IceCream production (extant)
+M2,IceCream,Milk,Phosphorus|CO2|WaterUse,0.178,1.0,0.00065|2.94|2050.0,Milk,3999.99,Inf,IceCream production (CO2 emissions reduced 1 tonne)
 ```
 
-Note that technology_data.csv embeds comma-delimited lists inside a |-delimited data file. This condenses our representation.
+Note that technology_data.csv embeds vertical bar-delimited lists inside a comma-delimited data file. This condenses our representation.
 
-### techsite_data.csv
 
-Our final data file, called "techsite" is structured as follows
-1. Tech location ID: a unique string ID for the technology, prefereably of the form L01, L02, ...; no spaces allowed!
-2. Tech ID: a Technology ID included in technology_data.csv
-3. Node ID: a Node ID included in node_data.csv
+### csvdata_techmap.csv
 
-Our example uses the following techsite entries
+The final data file, called "techmap" (because it maps instances of technologies onto the supply chain) is structured as follows
+1. Tech location ID: a unique string ID for the technology mapping; no spaces allowed!
+2. Tech ID: a Technology ID included in csvdata_technology.csv
+3. Node ID: a Node ID included in csvdata_node.csv
+4. Time ID: a Time ID included in csvdata_time.csv
+
+Our example uses the following techmap entries
 ```
-# 1. Tech location reference ID|2. Tech ID|3. Node ID
-L01|N00|T01
-L02|N01|T02
-L03|N03|T03
-L04|N05|T04
-L05|N07|T05
+# 1. Tech location reference ID,2. Node ID,3. Time ID,4. Tech ID
+L01,N1,T1,M1
+L02,N1,T2,M1
+L03,N1,T3,M1
+L04,N1,T4,M1
+L05,N1,T5,M1
 ```
 
-Technologies are defined in technology_data.csv in a general form, and are not mapped onto the supply chain. The technology-node pairs in techsite_data.csv serve this function, allowing multiple copies of a technology to be placed at different nodes without defining them in technology_data.csv; i.e., L01|T01|N01 and L02|T01|N02 creates two "copies" of T01 at nodes N01 and N02, treated as separate entities in the model. This can reduce the size and complexity of managing large numbers of technologies.
+Technologies are defined in csvdata_technology.csv in a general form, and are not mapped onto the supply chain. The technology-node pairs in csvdata_techmap.csv serve this function, allowing multiple copies of a technology to be placed at supply chain nodes; i.e., L1,M1,N1,T1 and L2,M1,N2,T1 creates two "copies" of technology M1 at nodes N1 and N2, treated as separate entities in the model. This can reduce the size and complexity of managing large numbers of technologies.
 
-### File Dependence
-
-Many of the files reviewed in this section have dependencies on other data. The following figure outlines all the dependencies between data files. This can help you structure your own examples.
-
-![FileStructure](assets/FileStructure.png)
-
-## Graphical Representation
-
-The structure we defined for coordinated supply chain models is useful for sketching network diagrams. `CoordinatedSupplyChains.jl` has a built-in network plot that will provide you with some feedback. The output from our example follows.
-
-![NetworkPlot](assets/NetworkPlot.png)
 
 ## Basic Usage
 
-`CoordinatedSupplyChains.jl` is built with two primary use patterns in mind: the first uses one function, and runs everything behind the scenes, returning solution data and the network plot to the user. Alternatively, the user is able to call the underlying functions directly, giving more control and access to all the intermediate data structures.
-
-### Option 1 - Everything in the Background
-
-The fastest way to go from data to results is to use the function "Run Steady State Case" or `RunSSCase()`.
+`CoordinatedSupplyChains.jl` is built to streamline your workflow with supply chain problems. It handles all the data input and output, as well as model building and solution. The user's responsibility is to set up the input data files defining their supply chain problem correctly. Consequently, the simplest usage of the package requires no more than pointing to the source data files.
 
 ```
-RunSSCase(CaseDataDirectory=pwd(); PrintModel=false, WriteReport=true, PrintOutput=true, ModelOutputFileName="_Model.txt", SolutionOutputFileName="_SolutionData.txt", PrintSpacer="*"^50)
+RunCSC()
 ```
 
-As you can see, this function has many optional keyword arguments, but none of these need to be altered to run the function. The only required input is the data directory, but even this has a default value for convenience. The optional keyword arguments are as follows
-- CaseDataDirectory=pwd(): the directory where the case study data are stored; the default value is the current directory where julia is running
-- PrintModel=false: If true, prints the model to the julia REPL; the model is saved to a text file either way
-- WriteReport=true: `CoordinatedSupplyChains.jl` writes all solution data to a file named SolutionOutputFileName, if false, skips this step
-- PrintOutput=true: Prints solution information to the julia REPL; if false, skips this step
-- ModelOutputFileName="_Model.txt": The default name where the model file is stored
-- SolutionOutputFileName="_SolutionData.txt: The default name where the solution file is stored
-- PrintSpacer="*"^50: A series of characters used to format printing, defaults to fifty asterisks.
+In this example, it is assumed that Julia is currently running in the same directory as the data files, and defaults to the current directory. This way `RunCSC()` can be used without an argument. The function has three keyword arguments as well, allowing you to tune your experience.
 
-As you can see, the majority of these are stylistic. The simplest way to use `CoordinatedSupplyChains.jl` is to change your directory to the location of your case study and call the function with no arguments. This might look like:
+1. optimizer; default: Clp.Optimizer
+2. UseArcLengths; default: true
+3. Output: default: false
+
+The first optional keyword argument is `optimizer` allowing the user to provide a different optimizer to solve their supply chain problem. By default, the open-source Clp optimizer is used. The user may want to use a licensed optimizer instead. This can be achieved by passing the optimizer argument:
 
 ```
-$ cd Documents/CaseStudies/Case01
+RunCSC(optimizer=Gurobi.Optimizer)
 ```
 
-On a Mac or Linux based terminal, this will change your directory to a folder called `Case01` where the case study data are stored. From here, start julia in your terminal, and load `CoordinatedCupplyChains.jl`.
+The next keyword argument is `UseArcLengths` defaulting to a value of `true`. This keyword allows the user to change the behavior of `CoordinatedSupplyChains.jl` with respect to arcs. By. default, the package will use the arc lengths provided by the user in csvdata_arcs.csv. However, these may be difficult or tedious to calculate by hand, especially if the user's supply chain has many connecting arcs. By passing
 
 ```
-julia> using CoordinatedSupplyChains
+RunCSC(UseArcLengths=false)
 ```
 
-With this setup, type
+the package will instead calculate great circle lengths for the arcs according to the node latitude and longitude data provided. This keyword provides a convenient means of estimating distances between locations.
+
+The final keyword `Output` (defaulting to `false`)  allows the user to specify that all model data should be returned once the code has run. This allows that user to inspect data structures manually. This keyword requires that the user indicate output names with the call to `RunCSC()`. The suggested naming convention is optional, but the number of outputs is required
 
 ```
-julia> RunSSCase()
+T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, MOD, ModelStats, SOL, POST = RunCSC(Output=true)
 ```
 
-What for the confirmation messages to let you know that the function has run, and everything is complete. `CoordinatedCupplyChains.jl` will create any additional folders required for solution data if they aren't already in the directory.
+In order, the outputs are:
+- `T`: time data structure
+- `N`: node data structure
+- `P`: product data structure
+- `Q`: impact data structure
+- `A`: arc data structure
+- `D`: demand data structure
+- `G`: supply data structure
+- `V`: environmental stakeholder data structure
+- `M`: technology data structure
+- `L`: technology mapping data structure
+- `Subsets`: Subsets used in the model
+- `Pars`: parameters used in the model
+- `MOD`: JuMP model
+- `ModelStats`: structure containing model statistics
+- `SOL`: structure containing the model solution data
+- `POST`: structure containing post-solution values calculated following the model solve
 
-### Option 2 - More Control
+Note that most of this data is made available to the user in the solution output, all of which is stored in a folder called "_SolutionData" in the directory with the model data. If the user wants to access, for example, the JuMP model following the solve, this keyword makes this possible. With the exception of `MOD` which is a JuMP model structure (see the JuMP documentation on [Models](https://jump.dev/JuMP.jl/stable/manual/models/)) these outputs are all custom Julia data structures. They are primarily defined for convenient model representation within `CoordinatedSupplyChains.jl` but you may want to have access to them for use in data manipulations or plotting solutions. Each structure has a number of fields containing data, which are accessed with a syntax `[sstructure_name].[field_name][index]`. The fields are as follows.
 
-If you would like to have more control over the series of function calls (e.g., ability to view intermediate data, or generate new cases on the fly) you can call a series of functions to replicate the behavior of `RunSSCase()`.
-
-Once again, start julia and load `CoordinatedCupplyChains.jl`.
-
+Time structure
 ```
-julia> using CoordinatedSupplyChains
-```
-
-The first of function you'll need is `LoadSSCaseData()`, which will pull in case study data and built the required data structures.
-
-```
-A,N,P,D,S,T,L,Sets,Pars = LoadSSCaseData(CaseDataDirectory=pwd(); CustomLengths=false, PrintSpacer="*"^50);
-```
-
-Once again, you can either point the function to a directory or, or let the function use the current directory. Case data are returned as structures with fields. A structure field is accessed using the the structure_name.structure_field notation. For example, A.ID returns the list of arc IDs. The outputs are as follows
-- A: structure containing arc data, with fields
-	- ID::Array: array of arc IDs
-	- node_s::Dict: starting node
-	- node_r::Dict: receiving node
-	- cap::Dict: arc capacity
-	- len::Dict: arc length, either calculated (by default) or custom, depending on CustomLengths
-- N: structure containing node data, with fields
-	- ID::Array: array of node IDs
-	- alias::Dict: node names
-	- lon::Dict: node longitudes
-	- lat::Dict: node latitudes
-- P: structure containing product data, with fields
-	- ID::Array: array of product IDs
-	- alias::Dict: product names
-	- transport_cost::Dict: product transport costs
-- D: structure containing consumer data, with fields
-	- ID::Array: array of consumer IDs
-	- node::Dict: consumer nodes
-	- prod::Dict: consumer products
-	- bid::Dict: consumer bids
-	- cap::Dict: consumer capacities
-- S: structure containing supplier data, with fields
-	- ID::Array: array of supplier IDs
-	- node::Dict: supplier nodes
-	- prod::Dict: supplier products
-	- bid::Dict: supplier bids
-	- cap::Dict: supplier capacities
-- T: structure containing technology data, with fields
-	- ID::Array: array of technology IDs
-	- Outputs::Dict: products produced by a technology
-	- Inputs::Dict: products consumed by a technology
-	- OutputYields::Dict: yield coefficients corresponding to Outputs
-	- InputYields::Dict: yield coefficients corresponding to Inputs
-	- InputRef::Dict: technology reference product
-	- bid::Dict: technology bid
-	- cap::Dict: technology capacity
-	- alias::Dict: technology name (or other info)
-- L: structure containing technology site data, with fields
-	- ID::Array: array of IDs for tech-site pairs
-	- node::Dict: tech-site node
-	- tech::Dict: tech-site tech
-- Sets: structure containing sets required in the optimization model 
-	- Ain::Dict: all arcs entering a node
-	- Aout::Dict: all arcs leaving a node
-	- TPQ::Array: valid [t,p,q] combinations
-	- NQT::Dict: valid [n,q,t] combinations, keyed to [n,q,t]
-	- NPt::Dict: technologies at node n producing product p keyed to [n,p]
-	- NQt::Dict: technologies at node n consuming product q keyed to [n,q]
-- Pars: structure containing parameters required in the optimization model 
-	- dMAX::Dict: maximum consumer allocation
-	- sMAX::Dict: maximum supplier allocation
-	- α::Dict: yield coefficients
-	- ξgenMAX::Dict: maximum technology production allocations
-	- ξconMAX::Dict: maximum technology consumption allocations
-	- fMAX::Dict: maximum transportation allocations
-
-This data is fed into the second function, OptimizeSSCase(), which builds and solves the coordination model. Model outputs and statistics are returned to the user. Note that the arguments 	`CaseDataDirectory` and after are optional, and have already been described.	
-
-```
-Output, Stats = OptimizeSSCase(A,N,P,D,S,T,L,Sets,Pars;
-        CaseDataDirectory=CaseDataDirectory,
-        PrintModel=PrintModel,
-        WriteReport=WriteReport,
-        PrintOutput=PrintOutput,
-        ModelOutputFileName=ModelOutputFileName,
-        SolutionOutputFileName=SolutionOutputFileName,
-        PrintSpacer=PrintSpacer);
+T
+	ID::Array - time point IDs
+   	dt::Dict - time point durations
 ```
 
-The return values are Output and Stats; structures containing fields with information about the model. These are defined as follows
-- Output: structure containing solution data
-	- z::Float64: objective value
-	- si::JuMP.Containers.DenseAxisArray: supply allocations; indexed like a Dict() object
-	- dj::JuMP.Containers.DenseAxisArray: demand allocations; indexed like a Dict() object
-	- snp::JuMP.Containers.DenseAxisArray: nodal supply allocations; indexed like a Dict() object
-	- dnp::JuMP.Containers.DenseAxisArray: nodal demand allocations; indexed like a Dict() object
-	- f::JuMP.Containers.DenseAxisArray: transport allocations; indexed like a Dict() object
-	- ξcon::JuMP.Containers.DenseAxisArray: technology consumption allocations; indexed like a Dict() object
-	- ξgen::JuMP.Containers.DenseAxisArray: technology generation allocations; indexed like a Dict() object
-	- πNP::JuMP.Containers.DenseAxisArray: nodal prices; indexed like a Dict() object
-	- πA::Dict: transport prices
-	- πT::Dict: technology prices
-	- Φd::Dict: consumer profits
-	- Φs::Dict: supplier profits
-	- Φf::Dict: transport provider profits
-	- Φξ::Dict: technology provider profits
-- Stats: structure containing model statistics
-	- NumVars::Float64: number of variables
-	- TotalIneqCons::Float64: total inequality constraints
-	- TotalEqCons::Float64: total equality constraints
-	- NumVarBounds::Float64: number of variable bounds
-	- ModelIneqCons::Float64: model inequality constraints
-	- ModelEqCons::Float64: model equality constraints
-
-Having solved the model, outputs can be saved to individual .csv files using SSRecordMaker(). This function does not return anything to the user.
-
+Node structure
 ```
-SSRecordMaker(A,N,P,D,S,T,L,Output,Stats;
-        CaseDataDirectory=CaseDataDirectory,
-        PrintSpacer=PrintSpacer);
+N
+	ID::Array - node IDs
+    	alias::Dict - node names
+    	lon::Dict - node longitudes
+    	lat::Dict - node latitudes
 ```
 
-Similarly, a network plot is produced by a call to SSNetworkPlot(). Note that only the flow values from Output (i.e., Output.f) are required in this function. Attempting to pass Output as a whole will fail.
-
+Product structure
 ```
-SSNetworkPlot(A,N,P,D,S,L,Output.f;
-        CaseDataDirectory=CaseDataDirectory,
-        PrintSpacer=PrintSpacer);
+P
+	ID::Array - product IDs
+    	alias::Dict - product names
+    	transport_cost::Dict - product transportation costs
+    	storage_cost::Dict - product storage costs
+```
+
+Impact structure
+```
+Q
+	ID::Array - impact IDs
+    	alias::Dict - impact names
+    	transport_coeff::Dict - impact transportation emission coefficients
+    	storage_coeff::Dict - impact storage emission coefficients
+```
+
+Arc structure
+```
+A
+	ID::Array - arc IDs
+    	n_send::Dict - arc sending node
+    	n_recv::Dict. - arc receiving node
+    	t_send::Dict - arc sending time point
+    	t_recv::Dict - arc receiving time point
+    	bid::Dict - arc bid
+    	cap::Dict - arc capacities
+    	len::Dict - arc length
+    	dur::Dict - arc duration
+   	ID_S::Array - array of arc IDs that are purely spatial
+    	ID_T::Array - array of arc IDs that are purely temporal
+    	ID_ST::Array - array of arc IDs that are spatiotemporal
+```
+
+Demand structure
+```
+D
+	ID::Array - demand IDs
+    	node::Dict - consumer node
+    	time::Dict - demand time point
+    	prod::Dict - demand product
+    	bid::Dict - demand bid
+    	cap::Dict - demand capacity
+    	Impacts::Dict - impacts associated with demand
+    	ImpactYields::Dict - impact coefficients
+```
+
+Supply structure
+```
+G
+	ID::Array - supply IDs
+    	node::Dict - supplier node
+    	time::Dict - supply time point
+    	prod::Dict - supply product
+    	bid::Dict - supply bid
+    	cap::Dict - supply capacity
+    	Impacts::Dict - impacts associated with supply
+    	ImpactYields::Dict - impact coefficients
+```
+
+Environmental stakeholder structure
+```
+V
+	ID::Array - e.s. IDs
+    	node::Dict - e.s. node
+    	time::Dict - e.s. time point
+    	impact::Dict - .e.s. impact
+    	bid::Dict - e.s. bid
+    	cap::Dict - e.s. capacity
+```
+
+Technology structure
+```
+M
+	ID::Array - technology ID
+    	Outputs::Dict - technology output products
+    	Inputs::Dict - technology input products
+    	Impacts::Dict - technology impacts
+    	OutputYields::Dict - technology output product yield coefficients
+    	InputYields::Dict - technology input product yield coefficients
+    	ImpactYields::Dict - technology impact yield coefficients
+    	InputRef::Dict - technology reference product
+    	bid::Dict - technology bid
+    	cap::Dict - technology capacity
+    	alias::Dict - technology name
+```
+
+Technology mapping structure
+```
+L
+	ID::Array - technology mapping ID
+    	node::Dict - technology instance node
+    	time::Dict - technology instance time
+    	tech::Dict - technology instance type
+```
+
+Subset structure
+```
+Subsets
+	T1::Array - set containing the first time point
+    	Tt::Array - set containing all time points except the last
+    	TT::Array - set containing all time points except the first
+    	Tprior::Dict - maps the prior time point to the current one
+    	Tpost::Dict - maps the subsequent time point to the current one
+   	Ain::Union{Dict, Nothing} - all arcs inbound upon a node
+    	Aout::Union{Dict, Nothing} - all arcs outbound from a node
+    	Dntp::Dict - returns consumers by node, time point, and product indices
+    	Gntp::Dict - returns suppliers by node, time point, and product indices
+    	Dntq::Union{Dict, Nothing} - returns consumers by node, time point, and impact indices
+    	Gntq::Union{Dict, Nothing} - returns suppliers by node, time point, and impact indices
+    	Vntq::Union{Dict, Nothing} - returns environmental stakeholders by node, time point, and impact indices
+    	DQ::Union{Array, Nothing} - returns all consumers with some environmental impact
+    	GQ::Union{Array, Nothing} - returns all suppliers with some environmental impact
+    	NTPgenl::Union{Dict, Nothing} - returns technology instances at a node and time point generating product p
+    	NTPconl::Union{Dict, Nothing} - returns technology instances at a node and time point consuming product p
+    	NTQgenl::Union{Dict, Nothing} - returns technology instances at a node and time point with impact q
+```
+
+Parameter structure
+```
+Pars
+	gMAX::Dict - supply allocation maxima
+    	dMAX::Dict - demand allocation maxima
+    	eMAX::Union{Dict, Nothing} - environmental stakeholder consumption maxima
+    	γiq::Union{Dict, Nothing} - environmental impact yield coefficient for suppliers
+    	γjq::Union{Dict, Nothing} - environmental impact yield coefficient for consumers
+    	γaq::Union{Dict, Nothing} - environmental impact yield coefficient for transportation
+    	γmp::Union{Dict, Nothing} - technology product yield coefficients
+    	γmq::Union{Dict, Nothing} - environmental impact yield coefficient for technologies
+    	ξgenMAX::Union{Dict, Nothing} - technology generation maxima
+    	ξconMAX::Union{Dict, Nothing} - technology consumption maxima
+    	ξenvMAX::Union{Dict, Nothing} - technology impact maxima
+```
+
+Model statistics structure
+```
+ModelStats
+	Variables::Int - number of model variables
+    	TotalInequalityConstraints::Int - total number of inequality constraints
+    	TotalEqualityConstraints::Int - total number of equality constraints
+    	VariableBounds::Int - number of model variable bounds
+    	ModelInequalityConstrtaints::Int - number of model inequality constraints
+    	ModelEqualityConstraints::Int - number of model equality constraints
+```
+
+Model solution data
+```
+SOL
+	TermStat::String - termination status
+    	PrimalStat::String - primal solution status
+    	DualStat::String - dual solution status
+    	z::Float64 - objective values
+    	g::JuMP.Containers.DenseAxisArray - supply allocations
+    	d::JuMP.Containers.DenseAxisArray - demand allocations
+    	e::Union{JuMP.Containers.DenseAxisArray,Nothing} - environmental stakeholder allocations
+    	f::Union{JuMP.Containers.DenseAxisArray,Nothing} - transportation allocations
+    	ξ::Union{JuMP.Containers.DenseAxisArray,Nothing} - technology allocations
+    	πp::JuMP.Containers.DenseAxisArray - product nodal prices
+    	πq::Union{JuMP.Containers.DenseAxisArray,Nothing} - impact nodal prices
+```
+
+Derived solution values
+```
+POST
+	gNTP::Dict - nodal supply allocations
+    	dNTP::Dict - nodal demand allocations
+    	eNTQ::Union{Dict,Nothing} - nodal environmental stakeholder allocations
+    	ξgen::Union{Dict,Nothing} - technology allocations, generation
+    	ξcon::Union{Dict,Nothing} - technology allocations, consumption
+    	ξenv::Union{Dict,Nothing} - technology allocations, impact
+    	π_iq::Union{Dict,Nothing} - supplier impact prices
+    	π_jq::Union{Dict,Nothing} - consumer impact prices
+    	π_a::Union{Dict,Nothing} - transportation prices
+    	π_aq::Union{Dict,Nothing} - transportation impact prices
+    	π_m::Union{Dict,Nothing} - technology prices
+    	π_mq::Union{Dict,Nothing} - technology impact prices
+    	ϕi::Dict - supplier profits
+    	ϕj::Dict - consumer profits
+    	ϕv::Union{Dict,Nothing} -  environmental stakeholder profits
+    	ϕl::Union{Dict,Nothing} - technology profits
+    	ϕa::Union{Dict,Nothing} - transportation profits
 ```

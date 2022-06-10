@@ -1,0 +1,5 @@
+# 1. Env. stakeholder reference, 2. Node, 3. Time, 4. Impact, 5. Bid (USD/impact unit), 6. Capacity
+V01,N2,T01,Nitrogen,5.00,0.4
+V02,N2,T01,Phosphorus,6.00,0.5
+V03,N2,T01,Nitrogen,-1.00,Inf
+V04,N2,T01,Phosphorus,-1.00,Inf

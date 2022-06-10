@@ -1,0 +1,2 @@
+# 1.Demand reference no., 2.Node, 3.Time, 4.Product, 5.Bid, 6.Capacity, 7. Emissions, 8. Emissions coefficients unit per tonne product consumed
+D001,N2,T01,Manure,0.00,0.1,Nitrogen|Phosphorus,0.4|0.7

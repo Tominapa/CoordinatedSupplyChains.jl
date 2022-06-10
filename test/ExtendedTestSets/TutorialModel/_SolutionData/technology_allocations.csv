@@ -1,0 +1,6 @@
+Technology ID,Node,Time,Reference Product,Consumed: Milk,Consumed: IceCream,Consumed: Beef,Consumed: Almonds,Generated: Milk,Generated: IceCream,Generated: Beef,Generated: Almonds,Impact: Phosphorus,Impact: CO2,Impact: WaterUse,Profit
+L01,N1,T1,Milk,1.12,,,,,0.19936,,,0.000728,4.412800000000001,2296.0,0.0
+L02,N1,T2,Milk,1.12,,,,,0.19936,,,0.000728,4.412800000000001,2296.0,0.0
+L03,N1,T3,Milk,1.12,,,,,0.19936,,,0.000728,4.412800000000001,2296.0,0.0
+L04,N1,T4,Milk,1.12,,,,,0.19936,,,0.000728,4.412800000000001,2296.0,0.0
+L05,N1,T5,Milk,1.12,,,,,0.19936,,,0.000728,4.412800000000001,2296.0,0.0

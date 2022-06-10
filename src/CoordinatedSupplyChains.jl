@@ -5,36 +5,42 @@ module CoordinatedSupplyChains
 using DelimitedFiles
 using JuMP
 using Clp
-using Plots
-#using PGFPlotsX
-#pgfplotsx()
 
 ################################################################################
 ### EXPORT LIST
 #= List all usable functions here; this makes them callable to users =#
-export LoadSSCaseData, OptimizeSSCase, SSRecordMaker, SSNetworkPlot, RunSSCase
+export RunCSC, BuildModelData, BuildModel, GetModelStats, SolveModel, PostSolveCalcs, SaveSolution
 
 ################################################################################
 ### INCLUDE STATEMENTS FOR CODE IN SEPARATE FILES
 
-# Structure definitions used by functions - no functions contained; nothing to export
-include("StructureDefinitions.jl")
-
-# Support functions required by other code; not to be callable by users - DO NOT EXPORT
+# Supporting functions
+#= Useful functions that support model building; e.g., distance calculations,
+dictionary initialization, etc.; not for export =#
 include("SupportFunctions.jl")
 
-# Functions for importing standardized model data - EXPORT
-include("ImportFunctions.jl")
+# Data structure definitions
+#= These describe the primary data structures that the model will use; nothing to export =#
+include("StructureDefns.jl")
 
-# Functions for solving coordinated supply chain models with JuMP - EXPORT
-include("OptimizationFunctions.jl")
+#= These functions help build the data structures for the model; EXPORT =#
+include("BuilderFunctions.jl")
 
-# Functions for exporting model results - EXPORT
-include("OutputFunctions.jl")
+# Data import functions
+#= Functions that import individual model case studies and build the data structures
+for a market model; EXPORT =#
+include("DataSetup.jl")
 
-# Functions for plotting results - EXPORT
-include("PlottingFunctions.jl")
+# Model building functions; EXPORT
+include("ModelSetup.jl")
 
-# Functions for running full workflows - EXPORT
+# Workflow functions to simplify use; EXPORT
 include("WorkflowFunctions.jl")
+
+################################################################################
+### CONSTANT VALUES
+const PrintSpacer = "*"^50
 end
+
+#Test lines; delete once testing documentation is done.
+#RunCSC("/Users/ptominac/Documents/environmentaleconomics/BilevelImpactMarkets/Code/ExtendedTestSets/NoArcs", optimizer=Gurobi.Optimizer)

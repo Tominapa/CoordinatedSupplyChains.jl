@@ -1,0 +1,4 @@
+# 1. Impact ID, 2. Impact alias, 3. Transportation coefficient (impact unit per tonne.km), 4. Storage coefficient (impact unit per tonne.h)
+Phosphorus,phosphate equivalent eutrophication potential - tonne P-eq,0.0,0.0
+CO2,Carbon dioxide emissions - tonne CO2-eq,0.01,0.001
+WaterUse,Water use - tonne,0.0,0.0

@@ -1,32 +1,42 @@
 ################################################################################
 ### FUNCTIONS FOR RUNNING COMPLETE WORKFLOWS
 
-function RunSSCase(CaseDataDirectory=pwd(); PrintModel=false, WriteReport=true, PrintOutput=true, ModelOutputFileName="_Model.txt", SolutionOutputFileName="_SolutionData.txt", PrintSpacer="*"^50, TestMode=false)
-
+function RunCSC(DataDir=pwd(); optimizer=Clp.Optimizer, UseArcLengths=true, Output=false)
+    """
+    A function to simplify workflow with CoordinatedSupplyChains.jl
+    Inputs:
+        - DataDir: the directory to a file containing case study data
+        - optimizer: (optional keyword argument) an aptimizer to solve
+                     a case study, e.g., Gurobi.Optimiizer; defaults to
+                     Clp.Optimizer if not specified
+    Returns:
+        - nothing by default, all data if Output=true
+    """
     # Load data
-    A,N,P,D,S,T,L,Sets,Pars = LoadSSCaseData(CaseDataDirectory);
+    T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, CF = BuildModelData(DataDir, UseArcLengths);
 
-    # Run steady state model
-    Output, Stats = OptimizeSSCase(A,N,P,D,S,T,L,Sets,Pars,
-        CaseDataDirectory=CaseDataDirectory,
-        PrintModel=PrintModel,
-        WriteReport=WriteReport,
-        PrintOutput=PrintOutput,
-        ModelOutputFileName=ModelOutputFileName,
-        SolutionOutputFileName=SolutionOutputFileName,
-        PrintSpacer=PrintSpacer);
+    # Build model
+    MOD = BuildModel(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, optimizer=optimizer)
 
-    # Record results
-    SSRecordMaker(A,N,P,D,S,T,L,Output,Stats,
-        CaseDataDirectory=CaseDataDirectory,
-        PrintSpacer=PrintSpacer);
+    # Get model statistics
+    ModelStats = GetModelStats(MOD)
 
-    # Generate network plot 
-    SSNetworkPlot(A,N,P,D,S,L,Output.f,
-        CaseDataDirectory=CaseDataDirectory,
-        PrintSpacer=PrintSpacer,
-        TestMode=TestMode);
+    # Solve the case model
+    SOL = SolveModel(MOD)
+
+    # Calculate case study values determined post-model solve
+    POST = PostSolveCalcs(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, SOL, CF)
+
+    # Save solution data
+    SaveSolution(DataDir, ModelStats, SOL, POST, T, N, P, Q, A, D, G, V, M, L, CF)
 
     # Update User
-    println(PrintSpacer*"\nSteady State Case Done!\n"*PrintSpacer)
+    println(PrintSpacer*"\n"*" "^19*"All Done!\n"*PrintSpacer)
+
+    # return
+    if Output
+        return T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, MOD, ModelStats, SOL, POST
+    else
+        return
+    end
 end

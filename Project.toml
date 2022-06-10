@@ -1,18 +1,16 @@
 name = "CoordinatedSupplyChains"
 uuid = "3aaabd38-80f0-440d-8028-ff5345734cd4"
 authors = ["Philip A Tominac <tominac@wisc.edu> and contributors"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Clp = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
-Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 
 [compat]
-Clp = "0.8"
-JuMP = "0.21"
-Plots = "1"
+Clp = "1"
+JuMP = "1"
 julia = "1"
 
 [extras]

@@ -1,0 +1,48 @@
+Water consumption of almonds: Fulton, Water-indexed benefits and impacts of California almonds
+	12984 L/kg [=] 12984 tonne/tonne
+
+Eutrophication potential almonds: https://www.sciencedirect.com/science/article/pii/S2214317317300033
+	0.44 kg PO4-eq/tonne almonds
+	(30.973762 g/mol/94.9714 g/mol)*0.44 = 0.144 kg P-eq/tonne
+	[=] 0.00044 tonne P-eq/tonne
+GWP of almonds:
+	2.009 tonne CO2-eq/tonne
+
+Price of sirloin: cuts.xls
+
+phosphorus emissions in milk production: fact_watershed_manure_crop.docx
+	0.781*31.2 + 50.4 = 74.7672 kg P/day
+	74.7672/1000/31.2 kg milk/day = 0.0024 tonne P/tonne milk
+
+CO2 emissions per tonne milk: Todde, A Comprehensive Energy Analysis and Related Carbon Footprint of Dairy Farms, Part 1: Direct Energy Requirements
+
+Water use for milk and beef: https://waterfootprint.org/en/water-footprint/product-water-footprint/water-footprint-crop-and-animal-products/
+
+CO2 emissions from beef: https://www.bloomberg.com/news/features/2021-10-19/beef-industry-falsely-claims-low-cow-carbon-footprint
+
+phosphorus emissions per tonne beef: eutrophication potential of 33.1 gPO4-eq./kgCW from https://www.sciencedirect.com/science/article/pii/S0308521X21002031
+	equivalent to 0.0331 tonne gP04-eq per tonne CW (carcass weight)
+	[=] (30.973762 g/mol/94.9714 g/mol)*0.0331 = 0.0108 tonne P-eq/tonne
+
+Environmental emissions associated with ice cream: (https://pdf.sciencedirectassets.com/271750/1-s2.0-S0959652618X00353/1-s2.0-S0959652618332633/main.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMr%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJGMEQCIE8NAqg9BojTxbgTfAv4Z7TJwZhoMo4JvSXjuZFg33DrAiBUAcV5bleZoKNht1JDIMipT3AU8ubgzMSkRxK1sut2PSrbBAjC%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAQaDDA1OTAwMzU0Njg2NSIMGP0cQlHnJa6tNWHFKq8EYt6%2B4SZagCssa7JOJrxxk8l0PvV23hwf%2Fkkg29QRmNuGyRrBMcfFCTSfQpXkF3NS73JQUtYoe2Y22uSsdvjCHluj62mD8njHVFU1RFLWJdsBObBUGsHT3mWHegkA6pMp1ZryXmKItBuPYYLDkQ3L2QHHs6VqmUbMcPey5fHEt%2BQ6%2FBmb9WGskfcwKa1VM4rt%2BQn1fbRCYD5SB0mxvpjyv%2BW0ZbHJ0Tw3cNnMCCdvocRPZTga0Jgno16gSjXNtameo1Jv8iZzwIz3%2B%2FTyG7bDF2MdNBU1JUNbLmmHHy6VrLGUF8s%2FSTZUsXitaXKazhTFNOPt4QIQT%2B7xg9nGC1brUeepZBd%2BHtwZIwYoQs8ZDfV8Lb63mqblhhCl4V3zbZG%2Fx2woygOcqiND2bgEh%2BV6JC4VK4tX0WoMH%2BJJrPtq%2FyhtwlncGE3NeM80ISa2o25dJ869l4Z1NXL3wzb8uJ1s%2FWiQAFHk%2BwmF03qmRo9gGp%2BLL8k%2BBH17cx6PbBdGXyp7BigM31bvcPM%2FqXc7aMLvw1S%2FAsE7H5L2iYzmqm6bvuvBGn1UH4RNHmbXI%2FUSOUcu1jmxo4ttfB5B%2FKjRyUq3oZs%2Bhg5lIH7j48EVZO%2FnDDfydsG%2FVxKA7Iub9Tm2SfMqSr2UDL2NaZ%2FTct%2FJdkZrAKWJmt9%2FQFQlD7xx3%2FNHVwuauTytFqXSCyDmnhbfcbCr6RDBK%2B2Q0ippyS%2BjrbYzbn6FwS4%2FvIdXdkT4Qm4E0TDn6PiUBjqqAXM2rnPGY6v1uEwD3kRgNOEdkwahdjQazEZze30hX2rilwMjbJNrtxbAswlH8CUibhMUoTpFi9L80ds9D4GT5Too%2Fc2QW37NAlwwvYyuHuyUIS0qsfdWoRbDmX36jnN0G7OjbWG5Oyv96Sc8W2amWSQL4KeyOzi1sx8GXcrJ94m5Hmfqq7yHrvYZQ1pD7XGJGqFZW%2FcP%2BgDBayUR2wxYMPLLo79jgHYUGW7N&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220606T174907Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAQ3PHCVTYR2PZLAVS%2F20220606%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=b7e07b0694c22a0c64e38cdb578e064c8a8585c3deb6581681c66515e77db614&hash=83bc41f07a344566420c8be7411ec5c177cc21743e9b0d63b2d094b4ae23d453&host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&pii=S0959652618332633&tid=spdf-cc57ecb7-b852-4a8d-a264-9a214d8a57c0&sid=f78399ce6c0de14cc68bf5017710464ce240gxrqa&type=client&ua=515455540900575d575c&rr=7172fb9958f886fc)
+	values:
+	GHG: 3.94 tonne CO2-eq/tonne
+	Water Use: 2050 l/kg, [=] 2050 tonne water/tonne
+	Eutrophication potential: 0.65 g P-eq/kg, [=] 0.00065 tonne P/tonne
+
+Ice cream density: https://www.acs.org/content/acs/en/education/resources/highschool/chemmatters/past-issues/archive-2013-2014/ice-cream-chemistry.html#:~:text=The%20amount%20of%20air%20also,to%200.9%20grams%20per%20milliliter.
+	"A gallon (3.8 liters) of ice cream must weigh at least 4.5 pounds, making the minimum density 0.54 gram per 	 	milliliter."
+	0.54 g/mL [=] 0.54 tonne/m^3
+
+Retail price of ice cream: https://www.statista.com/statistics/236868/retail-price-of-ice-cream-in-the-united-states/#:~:text=Retail%20prices%20of%20ice%20cream,over%20the%20last%20four%20years.
+	4.77 USD/0.5 USgal [=] 4.77 USD/2.27304 L [=] 2.0985 USD/L
+	convert to weight:
+	2.085 USD/L [=] 2085 USD/m^3
+	(2085 USD/m^3)/(0.54 tonne/m^3) [=] 3861.11 USD/tonne
+
+Making IceCream:
+	It takes 3:1 Milk:IceCream by volume, so factor in that ice cream has a density of 0.54 tonne/m^3,
+	then 3 m^3 of milk would make 1 m^3 of ice cream, weight 0.54 tonne, or:
+	1 tonne milk -> 0.178 tonne ice cream
+
+Almonds, wholesale price: https://www.selinawamucii.com/insights/prices/united-states-of-america/almonds/#:~:text=US%20almonds%20wholesale%20price&text=The%20average%20price%20for%20a,was%20US%248.45%20per%20kilogram.

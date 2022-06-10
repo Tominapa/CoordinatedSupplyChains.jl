@@ -1,0 +1,11 @@
+# 1.Supply reference no., 2.Node, 3.Time, 4.Product, 5.Bid, 6.Capacity, 7. Emissions, 8. Emissions coefficients unit per tonne product consumed
+G01,N1,T1,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G02,N1,T2,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G03,N1,T3,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G04,N3,T4,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G05,N3,T5,Milk,1150.0,1.12,Phosphorus|CO2|WaterUse,0.0024|0.100|1020.0
+G06,N2,T3,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G07,N2,T4,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G08,N2,T5,Beef,23479.23,1.0,Phosphorus|CO2|WaterUse,0.0108|33.1|15415.0
+G09,N3,T1,Almonds,6018.01,1.0,Phosphorus|CO2|WaterUse,0.144|2.009|12984.0
+G10,N3,T2,Almonds,6018.01,1.0,Phosphorus|CO2|WaterUse,0.144|2.009|12984.0

@@ -1,0 +1,8 @@
+# 1.Demand reference no., 2.Node, 3.Time, 4.Product, 5.Bid, 6.Capacity, 7. Emissions, 8. Emissions coefficients unit per tonne product consumed
+D1,N1,,A,6,1,,
+D2,N1,,A,5,1,,
+D3,N1,,A,4,1,,
+D4,N1,,A,3,1,,
+D5,N1,,A,2,1,,
+D6,N1,,A,1,1,,
+D7,N1,,A,0,1,,

@@ -1,0 +1,8 @@
+Demand ID,Demand node,Demand time,Demand product,Demand allocation,Consumer Profit
+D1,N1,T0,A,1.0,3.0
+D2,N1,T0,A,1.0,2.0
+D3,N1,T0,A,1.0,1.0
+D4,N1,T0,A,1.0,0.0
+D5,N1,T0,A,0.0,-0.0
+D6,N1,T0,A,0.0,-0.0
+D7,N1,T0,A,0.0,-0.0

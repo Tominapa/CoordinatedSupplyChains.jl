@@ -1,0 +1,3 @@
+# 1. Impact ID, 2. Impact alias, 3. Transportation coefficient (impact unit per tonne.km), 4. Storage coefficient (impact unit per tonne.h)
+Nitrogen,nitrogen emissions - tonne,0.0,0.0
+Phosphorus,phosphorus emissions - tonne,0.0,0.0

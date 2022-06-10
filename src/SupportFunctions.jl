@@ -1,18 +1,27 @@
 ################################################################################
 ### SUPPORTING FUNCTIONS - NOT FOR CALLING BY USER
 
-function GreatCircle(ref_lon, ref_lat, dest_lon, dest_lat)
+# mean Earth radius used for Great Circle distance calculation
+const R = 6335.439
+function GreatCircle(ref_lon::Float64, ref_lat::Float64, dest_lon::Float64, dest_lat::Float64)
     """
     Calculates the great circle distance between a reference location (ref)
     and a destination (dest) and returns the great circle distances in km
     """
-    # mean Earth radius used for Great Circle distance calculation
-    R = 6335.439
-
     # haversine formula for Great Circle distance calculation
-    dist = 2*R*asin(sqrt(((sind((dest_lat - ref_lat)/2))^2) +
+    dist = 2.0*R*asin(sqrt(((sind((dest_lat - ref_lat)/2))^2) +
         cosd(dest_lat)*cosd(ref_lat)*((sind((dest_lon - ref_lon)/2))^2)))
-    return(dist)
+    return dist
+end
+function GreatCircle(ref_lon::Vector{Float64}, ref_lat::Vector{Float64}, dest_lon::Vector{Float64}, dest_lat::Vector{Float64})
+    """
+    Calculates the great circle distance between a reference location (ref)
+    and a destination (dest) and returns the great circle distances in km
+    """
+    # haversine formula for Great Circle distance calculation, vectorized
+    dist = 2.0.*R.*asin.(sqrt.(((sind.((dest_lat .- ref_lat)./2)).^2) +
+        cosd.(dest_lat).*cosd.(ref_lat).*((sind.((dest_lon .- ref_lon)./2)).^2)))
+    return dist
 end
 
 function TextListFromCSV(IDs,DataCol)
@@ -35,12 +44,12 @@ function TextListFromCSV(IDs,DataCol)
     """
     Out = Dict()
     for i = 1:length(IDs)
-        Out[IDs[i]] = [String(i) for i in split(DataCol[i],",")]
+        Out[IDs[i]] = [String(i) for i in split(DataCol[i],"|")]
     end
     return Out
 end
 
-function NumericListFromCSV(IDs,ID2s,DataCol)
+function NumericListFromCSV(IDs,ID2s::Dict,DataCol)
     """
     For data that may be stored as a list of numeric values within CSV data
     i.e., |0.1,0.2,0.3,0.4| in a "|"-separated data file. This function parses
@@ -70,46 +79,106 @@ function NumericListFromCSV(IDs,ID2s,DataCol)
     Out = Dict()
     L = length(IDs)
     for l = 1:L
-        check = typeof(DataCol[l])
-        if check != Float64 && check != Int64 # then it's a string of numbers
-            temp = split(DataCol[l],",") # separate by commas into temporary list
-            values = [parse(Float64,temp[i]) for i = 1:length(temp)] # parse as Float64 array
-        else # in the case it was already a Float64 or an Int64
-            values = DataCol[l]
-        end
-        key1 = IDs[l]
-        key2s = ID2s[key1]
-        for i = 1:length(key2s)
-            Out[key1,key2s[i]] = values[i]
+        if DataCol[l] != "" # if blank, ignore entry
+            check = typeof(DataCol[l])
+            if check != Float64 && check != Int64 # then it's a string of numbers
+                temp = split(DataCol[l],"|") # separate by pipes into temporary list
+                values = [parse(Float64,temp[i]) for i = 1:length(temp)] # parse as Float64 array
+            else # in the case it was already a Float64 or an Int64
+                values = DataCol[l]
+            end
+            key1 = IDs[l]
+            key2s = ID2s[key1]
+            for i = 1:length(key2s)
+                Out[key1,key2s[i]] = values[i]
+            end
         end
     end
     return Out
 end
 
-function DictInit(OrderedMeyList,InitValue)
+function NumericListFromCSV(IDs,ID2s::Array,DataCol)
     """
-    Initializes a dictionary with the keys in OrderedMeyList and assigns each
-    key the value in InitValue
-    Inputs:
-        OrderedMeyList - a list of lists (i.e., list of lists of keys)
-        InitValue - probably either 0 or false
-    Outputs:
-        Out - a dictionary
-    Note: replaces the initialization loop for dictionaries that require full
-    population; i.e., in the case of set intersections
+    If ID2s is an Array (i.e., full loop over IDs and ID2s)
     """
     Out = Dict()
-    if length(OrderedMeyList) == 1
-        for key in OrderedMeyList[1]
-            Out[key] = InitValue
+    L = length(IDs)
+    for l = 1:L
+        check = typeof(DataCol[l])
+        if check != Float64 && check != Int64 # then it's a string of numbers
+            temp = split(DataCol[l],"|") # separate by commas into temporary list
+            values = [parse(Float64,temp[i]) for i = 1:length(temp)] # parse as Float64 array
+        else # in the case it was already a Float64 or an Int64
+            values = DataCol[l]
         end
-    else
-        SplatMeys = collect(Iterators.product(OrderedMeyList...))
-        for key in SplatMeys
-            Out[key] = InitValue
+        # Assign keys and values to output dictionary
+        for i = 1:length(ID2s)
+            Out[IDs[l],ID2s[i]] = values[i]
         end
     end
     return Out
+end
+
+function KeyArrayInit(OrderedKeyList)
+    """
+    Creates an array containing all combiinations of the keys in in OrderedKeyList;
+    identical to DictInit() and DictListInit() functionality, but doesn't
+    create a dictionary; just the array of keys
+    Inputs:
+        OrderedKeyList - a list of lists (i.e., list of lists of keys)
+    Outputs:
+        Out - an array of keys
+    """
+    if length(OrderedKeyList) == 1
+        return OrderedKeyList[1]
+    else
+        return collect(Iterators.product(OrderedKeyList...))
+    end
+end
+
+function DictListInit(OrderedKeyList,InitFunction)
+    """
+    Initializes a dictionary with the keys in OrderedKeyList and assigns each
+    key an empty array defined by InitFunction
+    Inputs:
+        OrderedKeyList - a list of lists (i.e., list of lists of keys)
+        InitFunction - a function producing an empty array
+    Outputs:
+        Out - a dictionary
+    """
+    if length(OrderedKeyList) == 1
+        return Dict(key => InitFunction() for key in OrderedKeyList[1])
+    else
+        return Dict(key => InitFunction() for key in collect(Iterators.product(OrderedKeyList...)))
+    end
+end
+
+function InitStringArray()
+    """
+    Returns an empty String array; function for use with DictListInit
+    """
+    return Array{String}(undef,0)
+end
+
+function DictInit(OrderedKeyList,InitValue)
+    """
+    Initializes a dictionary with the keys in OrderedKeyList and assigns each
+    key the value in InitValue
+    Inputs:
+        OrderedKeyList - a list of lists (i.e., list of lists of keys)
+        InitValue - probably either 0 or false
+    Outputs:
+        Out - a dictionary
+    Notes:
+        1) replaces the initialization loop for dictionaries that require full
+        population; i.e., in the case of set intersections
+        2) DO NOT USE WHERE InitValue IS ::Function
+    """
+    if length(OrderedKeyList) == 1
+        return Dict(key => InitValue for key in OrderedKeyList[1])
+    else
+        return Dict(key => InitValue for key in collect(Iterators.product(OrderedKeyList...)))
+    end
 end
 
 function PrettyPrint(Data, OrderedIndexList, TruthTable=nothing; Header="*"^50, DataName="", VarName="")
@@ -126,7 +195,7 @@ function PrettyPrint(Data, OrderedIndexList, TruthTable=nothing; Header="*"^50, 
         VarName - A string to be printed before each line
     """
     # check truthtable; if not, default to true
-    if TruthTable == nothing
+    if TruthTable === nothing
         TruthTable = DictInit(OrderedIndexList, true)
     end
     # Start printing headers
@@ -209,6 +278,22 @@ function FilePrint(Variable,OrderedIndexList,filename;Header="*"^50,DataName="",
     end
 end
 
+function PurgeQuotes(d::Dict)
+    """
+    Removes empty quote strings ("") from dictionaries
+    Inputs:
+        - arr, an array
+    Outputs:
+        - cleaned array
+    """
+    for k in keys(d)
+        if d[k] == [""]
+            d[k] = InitStringArray()
+        end
+    end
+    return d
+end
+
 #=
 function RawDataPrint(data,filename;Header="*"^50,DataName="")
     """
@@ -232,3 +317,47 @@ function RawDataPrint(data,filename;Header="*"^50,DataName="")
     end
 end
 =#
+
+function EnvDataGen(N,T,Q,InitValues,filedir)
+    """
+    Generates a default list of environmental stakeholders
+    based on node and time IDs, and sets a default bid (tax)
+    for each impact type using InitValueas. Just a convenient
+    way to create this file.
+    Inputs:
+        - N: node IDs
+        - T: time IDs
+        - Q: impact IDs
+        - InitValues: bid values; same length as Q
+        - filedir: file location for csvdata_env.csv
+    Outputs:
+        - text file: csvdata_env.csv
+    """
+    ### Setup
+    CardN = length(N)
+    CardT = length(T)
+    CardQ = length(Q)
+    CardV = CardN*CardT*CardQ
+    Vdigits = ndigits(CardV)
+
+    header = "# 1. Env. stakeholder reference| 2. Node| 3. Time| 4. Impact| 5. Bid (USD/impact unit)"
+
+    # Open file
+    filename = open(joinpath(filedir,"csvdata_env.csv"),"w")
+        # print header line with column information
+        print(filename, header)
+        # build list of default environmental stakeholders
+        OrdV = 0
+        for n = 1:CardN
+            for t = 1:CardT
+                for q = 1:CardQ
+                    OrdV += 1
+                    print(filename, "\nV"*lpad(OrdV,Vdigits,"0")*"|"*N[n]*"|"*T[t]*"|"*Q[q]*"|"*string(InitValues[q]))
+                end
+            end
+        end
+    close(filename)
+
+    return
+end
+# EnvDataGen(N.ID,T.ID,Q.ID,[0,0,0],"TestSets/BuildTest01")
