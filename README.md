@@ -2,7 +2,7 @@
 
 ---
 
-A supply chain modeling framework based on `JuMP` implementing the coordination model described described by [Tominac and Zavala](https://doi.org/10.1016/j.compchemeng.2020.107157). `CoordinatedSuppylChains.jl` automates this implementation; users can point it at a set of data files, and the package will build the model, solve it, save solution variables to .csv files, and create basic network plots of the system. For more control, users can call functions one-by-one, giving access to all intermediate data structures, or simply point a single convenient function at a directory with the required data files, and `CoordinatedSupplyChains` will do the rest. The present release supports steady state coordination, with dynamic coordination based on [Tominac, Zhang, and Zavala](https://arxiv.org/abs/2106.13836) planned for a future release.
+A supply chain modeling framework based on `JuMP` implementing the coordination model described described by [Tominac and Zavala](https://doi.org/10.1016/j.compchemeng.2020.107157). `CoordinatedSuppylChains.jl` automates this implementation; users can point it at a set of data files, and the package will build the model, solve it, save solution variables to .csv files, and create basic network plots of the system. For more control, users can call functions one-by-one, giving access to all intermediate data structures, or simply point a single convenient function at a directory with the required data files, and `CoordinatedSupplyChains` will do the rest. The present release supports steady-state and dynamic supply chain coordination problems, with the option to include environmental impact metrics.
 
 | **Documentation**                                                               | **Build Status**                                                                                | **Citation** |
 |:-------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|:--------------------------------------:|
@@ -17,7 +17,7 @@ Coordination is a powerful market management system used in electrical grid mana
 
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://tominapa.github.io/CoordinatedSupplyChains.jl/dev)
 
-Documentation includes an overview of the software, instructions for setting up the required data files, and guides that will help you get stared.
+Documentation includes an overview of the software, instructions for setting up the required data files, and guides that will help you get started.
 
 ## Citing
 
