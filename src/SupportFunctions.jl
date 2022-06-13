@@ -24,7 +24,7 @@ function GreatCircle(ref_lon::Vector{Float64}, ref_lat::Vector{Float64}, dest_lo
     return dist
 end
 
-function TextListFromCSV(IDs,DataCol)
+function TextListFromCSV(IDs::Vector{String},DataCol::Vector{String})
     """
     This function recovers comma-separated lists of text labels stored as
     single entries in a csv file (separated by a non-comma separator) and
@@ -42,13 +42,16 @@ function TextListFromCSV(IDs,DataCol)
         asset_inputs[asset_id[s]] = [String(i) for i in split(AssetData[s,4],",")]
     end
     """
-    Out = Dict()
+    Out = Dict{String,Vector{String}}()
     for i = 1:length(IDs)
-        Out[IDs[i]] = [String(i) for i in split(DataCol[i],"|")]
+        # Broadcast string() function to individual vector elements
+        # Out[IDs[i]] is assigned a Vector{String} object
+        Out[IDs[i]] = string.(split(DataCol[i],"|"))
     end
     return Out
 end
 
+#=
 function NumericListFromCSV(IDs,ID2s::Dict,DataCol)
     """
     For data that may be stored as a list of numeric values within CSV data
@@ -101,7 +104,7 @@ function NumericListFromCSV(IDs,ID2s::Array,DataCol)
     """
     If ID2s is an Array (i.e., full loop over IDs and ID2s)
     """
-    Out = Dict()
+    Out = Dict{String,Float64}()
     L = length(IDs)
     for l = 1:L
         check = typeof(DataCol[l])
@@ -114,6 +117,60 @@ function NumericListFromCSV(IDs,ID2s::Array,DataCol)
         # Assign keys and values to output dictionary
         for i = 1:length(ID2s)
             Out[IDs[l],ID2s[i]] = values[i]
+        end
+    end
+    return Out
+end
+=#
+
+function NumericListFromCSV2(ID1s::Vector{String},ID2s::Vector{String},DataCol::Vector{String})
+    """
+    Multiple dispatch option for ID2s::Vector{String}
+    """
+    # Set up output dictionary;
+    # it will always have two keys (type: Tuple{String,String})
+    # mapped to one Float64 value
+    Out = Dict{Tuple{String,String},Float64}()
+    cardID1 = length(ID1s)
+    cardID2 = length(ID2s)
+
+    # There will be one DataCol entry for each ID in IDs
+    for id1 = 1:cardID1
+        # break up the DataCol entry string
+        pieces = split(DataCol[id1], "|")
+        # parse the pieces as Float64
+        pieces_float = map(pieces) do piece
+            parse(Float64, piece)
+        end
+        for id2 = 1:cardID2
+            Out[ID1s[id1],ID2s[id2]] = pieces_float[id2]
+        end
+    end
+    return Out
+end
+function NumericListFromCSV2(ID1s::Vector{String},ID2s::Dict{String,Vector{String}},DataCol::Vector{String})
+    """
+    Multiple dispatch option for ID2s::Dict{String,Vector{String}}
+    """
+    # Set up output dictionary;
+    # it will always have two keys (type: Tuple{String,String})
+    # mapped to one Float64 value
+    Out = Dict{Tuple{String,String},Float64}()
+    cardID1 = length(ID1s)
+    cardID2 = [length(ID2s[ID1s[i]]) for i = 1:cardID1]
+
+    # There will be one DataCol entry for each ID in IDs
+    for id1 = 1:cardID1
+        if ID2s[ID1s[id1]] != [] # skip cases with no entries; only an issue with ID2s::Dict{String,Vector{String}}
+            # break up the DataCol entry string
+            pieces = split(DataCol[id1], "|")
+            # parse the pieces as Float64
+            pieces_float = map(pieces) do piece
+                parse(Float64, piece)
+            end
+            for id2 = 1:cardID2[id1]
+                Out[ID1s[id1],ID2s[ID1s[id1]][id2]] = pieces_float[id2]
+            end
         end
     end
     return Out

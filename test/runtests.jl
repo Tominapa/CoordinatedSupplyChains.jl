@@ -9,12 +9,13 @@ using Test
                 "NoTimeNoArcsNoImpsNoTechs",
                 "NutrientModelDemandLoss",
                 "NutrientModelDemandLossV2",
-                "TutorialModel"]
+                "TutorialModel",
+                "TutorialModelIntValues"]
     SolutionDirectory = "_SolutionData"
     SolutionFileName = "_SolutionData.txt"
 
     # Keyword options
-    UseArcsForTest = [true,true,true,true,true,false]
+    UseArcsForTest = [true,true,true,true,true,false,false]
 
     # Run through the six test cases
     for i = 1:length(TestList)

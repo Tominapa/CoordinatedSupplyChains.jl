@@ -19,9 +19,9 @@
 
 `CoordinatedSupplyChains.jl` has the following dependencies, which will need to be installed as well (if they are not already installed globally, or as part of your project installation with `CoordinatedSupplyChains.jl`)
 - `JuMP`
-- `Clp`
+- `HiGHS`
 
-`JuMP` provides the modeling facility for the coordination problem, and uses the `Clp` solver by default, which is open-source and does not require a license.
+`JuMP` provides the modeling facility for the coordination problem, and `CoordinatedSupplyChains.jl` uses the `HiGHS` solver by default, which is open-source and does not require a license.
 
 
 ## Citing

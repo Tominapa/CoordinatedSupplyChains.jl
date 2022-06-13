@@ -1,6 +1,6 @@
 ################################################################################
 ### BUILD JuMP MODEL
-function BuildModel(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars; optimizer=Clp.Optimizer)
+function BuildModel(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars; optimizer=DefaultOptimizer)
     """
     Builds a coordination model from data structures
     Inputs:
@@ -16,7 +16,6 @@ function BuildModel(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars; optimizer=Clp.O
         - technology mapping struct (L)
         - Subsets struct (Subsets)
         - Parameter struct (Pars)
-        - Control flow struct (CF)
     Outputs:
         - JuMP model (MOD)
     """

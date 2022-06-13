@@ -4,7 +4,7 @@ module CoordinatedSupplyChains
 ### IMPORT LIST
 using DelimitedFiles
 using JuMP
-using Clp
+using HiGHS
 
 ################################################################################
 ### EXPORT LIST
@@ -40,6 +40,7 @@ include("WorkflowFunctions.jl")
 ################################################################################
 ### CONSTANT VALUES
 const PrintSpacer = "*"^50
+const DefaultOptimizer = HiGHS.Optimizer
 end
 
 #Test lines; delete once testing documentation is done.

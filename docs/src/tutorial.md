@@ -37,9 +37,9 @@ Transacting products and providing services are the supply chain stakeholders. T
 With this graph abstraction and the five stakeholder categories, it is possible to build representations of complex supply chain systems including product processing and sustainability metrics. 
 
 
-## Data Format
+## Data Format and Required Files
 
-Any coordinated supply chain problem is defined by data detailing the sets of nodes, time points, arcs, products, impacts, and stakeholders. This data is divided into ten specially named .csv files. These are comma-separated by default, so any convenient .csv editor (text editor or spreadsheet software) will work. The file name rconventions are as follows:
+Any coordinated supply chain problem is defined by data detailing the sets of nodes, time points, arcs, products, impacts, and stakeholders. This data is divided into ten specially named .csv files. These are comma-separated by default, so any convenient .csv editor (text editor or spreadsheet software) will work. The file name conventions are as follows:
 - csvdata_node.csv
 - csvdata_time.csv (optional)
 - csvdata_arcs.csv (optional)
@@ -346,11 +346,11 @@ RunCSC()
 
 In this example, it is assumed that Julia is currently running in the same directory as the data files, and defaults to the current directory. This way `RunCSC()` can be used without an argument. The function has three keyword arguments as well, allowing you to tune your experience.
 
-1. optimizer; default: Clp.Optimizer
+1. optimizer; default: HiGHS.Optimizer
 2. UseArcLengths; default: true
 3. Output: default: false
 
-The first optional keyword argument is `optimizer` allowing the user to provide a different optimizer to solve their supply chain problem. By default, the open-source Clp optimizer is used. The user may want to use a licensed optimizer instead. This can be achieved by passing the optimizer argument:
+The first optional keyword argument is `optimizer` allowing the user to provide a different optimizer to solve their supply chain problem. By default, the open-source HiGHS optimizer is used. The user may want to use a licensed optimizer instead. This can be achieved by passing the optimizer argument:
 
 ```
 RunCSC(optimizer=Gurobi.Optimizer)

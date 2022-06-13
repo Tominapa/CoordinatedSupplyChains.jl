@@ -1,0 +1,4 @@
+# 1. Arc ID, 2. Arc first node, 3. Arc second node, 4. Arc capacity, 5. Arc Length
+A1,N1,N2,1E6|1E6|1E6|1E6,
+A2,N2,N3,1E6|1E6|1E6|1E6,
+A3,N3,N1,1E6|1E6|1E6|1E6,

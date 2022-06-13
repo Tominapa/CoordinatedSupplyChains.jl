@@ -1,14 +1,14 @@
 ################################################################################
 ### FUNCTIONS FOR RUNNING COMPLETE WORKFLOWS
 
-function RunCSC(DataDir=pwd(); optimizer=Clp.Optimizer, UseArcLengths=true, Output=false)
+function RunCSC(DataDir=pwd(); optimizer=DefaultOptimizer, UseArcLengths=true, Output=false)
     """
     A function to simplify workflow with CoordinatedSupplyChains.jl
     Inputs:
         - DataDir: the directory to a file containing case study data
         - optimizer: (optional keyword argument) an aptimizer to solve
                      a case study, e.g., Gurobi.Optimiizer; defaults to
-                     Clp.Optimizer if not specified
+                     HiGHS.Optimizer if not specified
     Returns:
         - nothing by default, all data if Output=true
     """

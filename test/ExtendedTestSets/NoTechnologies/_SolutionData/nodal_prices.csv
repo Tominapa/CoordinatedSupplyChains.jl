@@ -1,7 +1,7 @@
 Node,Time point,Product/Impact,Nodal price
-N1,T01,Manure,0.0
-N1,T01,Nitrogen,0.0
-N1,T01,Phosphorus,0.0
-N2,T01,Manure,1.0000000000000002
+N1,T01,Manure,-0.0
+N1,T01,Nitrogen,-0.0
+N1,T01,Phosphorus,-0.0
+N2,T01,Manure,1.0
 N2,T01,Nitrogen,4.25
 N2,T01,Phosphorus,-1.0

@@ -33,26 +33,26 @@ function BuildModelData(DataDir,UseArcLengths)
     UseTime = true # assume time data exists by default
     if time_data == false
         UseTime = false
-        time_id = ["T0"]
-        time_dur = Dict(time_id[1] => 0.0)
+        time_id = Vector{String}(["T0"])
+        time_dur = Dict{String,Float64}(time_id[1] => 0)
     else
-        time_id = convert(Array{String}, time_data[:, 1])
+        time_id = convert(Vector{String}, time_data[:, 1])
         time_dur = Dict{String,Float64}(zip(time_id, convert(Array{Float64}, time_data[:, 2]))) # duration
     end
 
     ### Node data parsing
     node_data = readdlm(joinpath(DataDir,"csvdata_node.csv"),',',Any,comments=true) # import csv data
-    node_id = convert(Array{String}, node_data[:, 1])
-    node_alias = Dict{String,String}(zip(node_id, node_data[:, 2])) # node name
-    node_lon = Dict{String,Float64}(zip(node_id, convert(Array{Float64}, node_data[:, 3]))) # longitude
-    node_lat  = Dict{String,Float64}(zip(node_id, convert(Array{Float64}, node_data[:, 4]))) # latitude
+    node_id = convert(Vector{String}, node_data[:, 1])
+    node_alias = Dict{String,String}(zip(node_id, convert(Vector{String}, node_data[:, 2]))) # node name
+    node_lon = Dict{String,Float64}(zip(node_id, convert(Vector{Float64}, node_data[:, 3]))) # longitude
+    node_lat  = Dict{String,Float64}(zip(node_id, convert(Vector{Float64}, node_data[:, 4]))) # latitude
 
     ### Product data parsing
     product_data = readdlm(joinpath(DataDir,"csvdata_product.csv"),',',Any,comments=true) # import csv data
-    product_id = convert(Array{String}, product_data[:, 1])
-    product_alias = Dict{String,String}(zip(product_id, convert(Array{String}, product_data[:, 2]))) # product name
-    product_transport_cost = Dict{String,Float64}(zip(product_id, product_data[:, 3])) # product transport cost
-    product_storage_cost = Dict{String,Float64}(zip(product_id, product_data[:, 4])) # product storage cost
+    product_id = convert(Vector{String}, product_data[:, 1])
+    product_alias = Dict{String,String}(zip(product_id, convert(Vector{String}, product_data[:, 2]))) # product name
+    product_transport_cost = Dict{String,Float64}(zip(product_id, convert(Vector{Float64}, product_data[:, 3]))) # product transport cost
+    product_storage_cost = Dict{String,Float64}(zip(product_id, convert(Vector{Float64}, product_data[:, 4]))) # product storage cost
 
     ### Impact data parsing
     impact_data = try
@@ -66,15 +66,15 @@ function BuildModelData(DataDir,UseArcLengths)
         UseImpacts = false # use UseImpacts as the control flow condition in main code
     end
     if UseImpacts # Parse impact data if it is defined
-        impact_id = convert(Array{String}, impact_data[:, 1])
-        impact_alias = Dict{String,String}(zip(impact_id, convert(Array{String}, impact_data[:, 2]))) # impact name & units
-        impact_transport_coeff = Dict{String,Float64}(zip(impact_id, impact_data[:, 3])) # impact production during transport
-        impact_storage_coeff = Dict{String,Float64}(zip(impact_id, impact_data[:, 4])) # impact production during storage
+        impact_id = convert(Vector{String}, impact_data[:, 1])
+        impact_alias = Dict{String,String}(zip(impact_id, convert(Vector{String}, impact_data[:, 2]))) # impact name & units
+        impact_transport_coeff = Dict{String,Float64}(zip(impact_id, convert(Vector{Float64}, impact_data[:, 3]))) # impact production during transport
+        impact_storage_coeff = Dict{String,Float64}(zip(impact_id, convert(Vector{Float64}, impact_data[:, 4]))) # impact production during storage
     else
-        impact_id = []
-        impact_alias = Dict() # impact name & units
-        impact_transport_coeff = Dict() # impact production during transport
-        impact_storage_coeff = Dict() # impact production during storage
+        impact_id = Vector{String}()
+        impact_alias = Dict{String,String}() # impact name & units
+        impact_transport_coeff = Dict{String,Float64}() # impact production during transport
+        impact_storage_coeff = Dict{String,Float64}() # impact production during storage
     end
 
     ### Arc data parsing
@@ -90,11 +90,11 @@ function BuildModelData(DataDir,UseArcLengths)
     end
     if UseArcs # Parse arc data if it is defined
         arc_id = convert(Array{String}, arc_data[:, 1])
-        arc_n = Dict{String,String}(zip(arc_id, arc_data[:, 2])) # sending node "n"
-        arc_m  = Dict{String,String}(zip(arc_id, arc_data[:, 3])) # receiving node "m"
-        arc_cap  = NumericListFromCSV(arc_id, product_id, arc_data[:, 4]) # arc capacities, by product
+        arc_n = Dict{String,String}(zip(arc_id, convert(Vector{String}, arc_data[:, 2]))) # sending node "n"
+        arc_m  = Dict{String,String}(zip(arc_id, convert(Vector{String}, arc_data[:, 3]))) # receiving node "m"
+        arc_cap = NumericListFromCSV2(arc_id, product_id, string.(arc_data[:, 4])) # arc capacities, by product
         if UseArcLengths
-            arc_len = Dict{String,Float64}(zip(arc_id, arc_data[:, 5])) # custom arc length
+            arc_len = Dict{String,Float64}(zip(arc_id, convert(Vector{Float64}, arc_data[:, 5]))) # custom arc length
         else # i.e., calculate great circle arc lengths
             ref_lons = zeros(length(arc_id))
             ref_lats = zeros(length(arc_id))
@@ -108,12 +108,13 @@ function BuildModelData(DataDir,UseArcLengths)
             end
             arc_len = Dict{String,Float64}(zip(arc_id,GreatCircle(ref_lons, ref_lats, dest_lons, dest_lats)))
         end
-    else
-        arc_id = []
-        arc_n = Dict() # sending node "n"
-        arc_m  = Dict() # receiving node "m"
-        arc_cap  = Dict() # arc capacities, by product
-        arc_len = Dict() # custom arc length
+    else # there are no arcs, and all of these stay empty
+        # NOTE: it is important that JuMP has these empty values so it's iterators can skip over the corresponding code
+        arc_id = Vector{String}()
+        arc_n = Dict{String,String}() # sending node "n"
+        arc_m  = Dict{String,String}() # receiving node "m"
+        arc_cap  = Dict{Tuple{String,String},Float64}() # arc capacities, by product
+        arc_len = Dict{String,Float64}() # custom arc length
     end
     if !UseArcs && length(node_id) > 1
         println("*"^10*"  WARNING  "*"*"^10)
@@ -125,54 +126,54 @@ function BuildModelData(DataDir,UseArcLengths)
 
     ### Demand data parsing
     demand_data = readdlm(joinpath(DataDir,"csvdata_demand.csv"),',',Any,comments=true) # import csv data
-    demand_id = convert(Array{String}, demand_data[:, 1])
-    demand_node = Dict{String,String}(zip(demand_id, demand_data[:, 2])) # demand node
+    demand_id = convert(Vector{String}, demand_data[:, 1])
+    demand_node = Dict{String,String}(zip(demand_id, convert(Vector{String}, demand_data[:, 2]))) # demand node
     if UseTime
-        demand_time = Dict{String,String}(zip(demand_id, demand_data[:, 3])) # demand time
+        demand_time = Dict{String,String}(zip(demand_id, convert(Vector{String}, demand_data[:, 3]))) # demand time
     else
         demand_time = Dict{String,String}(zip(demand_id, repeat(time_id,length(demand_id)))) # demand time
     end
-    demand_prod = Dict{String,String}(zip(demand_id, demand_data[:, 4])) # demand product
-    demand_bid = Dict{String,Float64}(zip(demand_id, demand_data[:, 5])) # demand bid
-    demand_cap = Dict{String,Float64}(zip(demand_id, demand_data[:, 6])) # demand capacity
-    demand_impact = PurgeQuotes(TextListFromCSV(demand_id, demand_data[:,7])) # demand impacts
-    demand_impact_yield = NumericListFromCSV(demand_id, demand_impact, demand_data[:, 8]) # demand impact yield factors
+    demand_prod = Dict{String,String}(zip(demand_id, convert(Vector{String}, demand_data[:, 4]))) # demand product
+    demand_bid = Dict{String,Float64}(zip(demand_id, convert(Vector{Float64}, demand_data[:, 5]))) # demand bid
+    demand_cap = Dict{String,Float64}(zip(demand_id, convert(Vector{Float64}, demand_data[:, 6]))) # demand capacity
+    demand_impact = PurgeQuotes(TextListFromCSV(demand_id, string.(demand_data[:,7]))) # demand impacts
+    demand_impact_yield = NumericListFromCSV2(demand_id, demand_impact, string.(demand_data[:, 8])) # demand impact yield factors
 
     ### Supply data parsing
     supply_data = readdlm(joinpath(DataDir,"csvdata_supply.csv"),',',Any,comments=true)
-    supply_id = convert(Array{String}, supply_data[:, 1])
-    supply_node = Dict{String,String}(zip(supply_id, supply_data[:, 2])) # supply node
+    supply_id = convert(Vector{String}, supply_data[:, 1])
+    supply_node = Dict{String,String}(zip(supply_id, convert(Vector{String}, supply_data[:, 2]))) # supply node
     if UseTime
-        supply_time = Dict{String,String}(zip(supply_id, supply_data[:, 3])) # supply time
+        supply_time = Dict{String,String}(zip(supply_id, convert(Vector{String}, supply_data[:, 3]))) # supply time
     else
         supply_time = Dict{String,String}(zip(supply_id, repeat(time_id,length(supply_id)))) # supply time
     end
-    supply_prod = Dict{String,String}(zip(supply_id, supply_data[:, 4])) # supply product
-    supply_bid = Dict{String,Float64}(zip(supply_id, supply_data[:, 5])) # supply bid
-    supply_cap = Dict{String,Float64}(zip(supply_id, supply_data[:, 6])) # supply capacity
-    supply_impact = PurgeQuotes(TextListFromCSV(supply_id, supply_data[:,7])) # supply impacts
-    supply_impact_yield = NumericListFromCSV(supply_id, supply_impact, supply_data[:, 8]) # supply impact yield factors
+    supply_prod = Dict{String,String}(zip(supply_id, convert(Vector{String}, supply_data[:, 4]))) # supply product
+    supply_bid = Dict{String,Float64}(zip(supply_id, convert(Vector{Float64}, supply_data[:, 5]))) # supply bid
+    supply_cap = Dict{String,Float64}(zip(supply_id, convert(Vector{Float64}, supply_data[:, 6]))) # supply capacity
+    supply_impact = PurgeQuotes(TextListFromCSV(supply_id, string.(supply_data[:,7]))) # supply impacts
+    supply_impact_yield = NumericListFromCSV2(supply_id, supply_impact, string.(supply_data[:, 8])) # supply impact yield factors
 
     ### Environmental stakeholder data parsing
     if UseImpacts # if impacts are undefined, definitely don't need impact consumption data
         env_data = readdlm(joinpath(DataDir,"csvdata_env.csv"),',',Any,comments=true) # import csv data
-        env_id = convert(Array{String}, env_data[:, 1])
-        env_node = Dict{String,String}(zip(env_id, env_data[:, 2])) # environmental node
+        env_id = convert(Vector{String}, env_data[:, 1])
+        env_node = Dict{String,String}(zip(env_id, convert(Vector{String}, env_data[:, 2]))) # environmental node
         if UseTime
-            env_time = Dict{String,String}(zip(env_id, env_data[:, 3])) # environmental time
+            env_time = Dict{String,String}(zip(env_id, convert(Vector{String}, env_data[:, 3]))) # environmental time
         else
             env_time = Dict{String,String}(zip(env_id, repeat(time_id,length(env_id)))) # environmental time
         end
-        env_impact = Dict{String,String}(zip(env_id, env_data[:, 4])) # environmental product
-        env_bid = Dict{String,Float64}(zip(env_id, env_data[:, 5])) # environmental bid
-        env_cap = Dict{String,Float64}(zip(env_id, env_data[:, 6])) # environmental capacity (Inf, in most cases)
+        env_impact = Dict{String,String}(zip(env_id, convert(Vector{String}, env_data[:, 4]))) # environmental product
+        env_bid = Dict{String,Float64}(zip(env_id, convert(Vector{Float64}, env_data[:, 5]))) # environmental bid
+        env_cap = Dict{String,Float64}(zip(env_id, convert(Vector{Float64}, env_data[:, 6]))) # environmental capacity (Inf, in most cases)
     else
-        env_id = []
-        env_node = Dict() # environmental node
-        env_time = Dict() # environmental time
-        env_impact = Dict() # environmental product
-        env_bid = Dict() # environmental bid
-        env_cap = Dict() # environmental capacity (Inf, in most cases)
+        env_id = Vector{String}()
+        env_node = Dict{String,String}() # environmental node
+        env_time = Dict{String,String}() # environmental time
+        env_impact = Dict{String,String}() # environmental product
+        env_bid = Dict{String,Float64}() # environmental bid
+        env_cap = Dict{String,Float64}() # environmental capacity (Inf, in most cases)
     end
 
     ### Technology data parsing
@@ -187,46 +188,46 @@ function BuildModelData(DataDir,UseArcLengths)
         UseTechs = false # use UseTechs as the control flow condition in main code
     end
     if UseTechs # Parse technology data if it is defined
-        tech_id = convert(Array{String}, tech_data[:, 1])
-        tech_output = TextListFromCSV(tech_id, tech_data[:,2]) # technology outputs
-        tech_input = TextListFromCSV(tech_id, tech_data[:,3]) # technology inputs
-        tech_impact = PurgeQuotes(TextListFromCSV(tech_id, tech_data[:,4])) # technology impacts
-        tech_output_yield = NumericListFromCSV(tech_id, tech_output, tech_data[:, 5]) # product yield factors
-        tech_input_yield = NumericListFromCSV(tech_id, tech_input, tech_data[:, 6]) # product yield factors
-        tech_impact_yield = NumericListFromCSV(tech_id, tech_impact, tech_data[:, 7]) # impact yield factors
-        tech_ref = Dict(zip(tech_id, tech_data[:, 8])) # reference product
-        tech_bid = Dict(zip(tech_id, tech_data[:, 9])) # technology bid (operating cost)
-        tech_cap = Dict(zip(tech_id, tech_data[:, 10])) # technology capacity (per time unit)
-        tech_alias = Dict(zip(tech_id, tech_data[:, 11])) # technology alias
+        tech_id = convert(Vector{String}, tech_data[:, 1])
+        tech_output = TextListFromCSV(tech_id, convert(Vector{String}, tech_data[:,2])) # technology outputs
+        tech_input = TextListFromCSV(tech_id, convert(Vector{String}, tech_data[:,3])) # technology inputs
+        tech_impact = PurgeQuotes(TextListFromCSV(tech_id, convert(Vector{String}, tech_data[:,4]))) # technology impacts
+        tech_output_yield = NumericListFromCSV2(tech_id, tech_output, string.(tech_data[:, 5])) # product yield factors
+        tech_input_yield = NumericListFromCSV2(tech_id, tech_input, string.(tech_data[:, 6])) # product yield factors
+        tech_impact_yield = NumericListFromCSV2(tech_id, tech_impact, string.(tech_data[:, 7])) # impact yield factors
+        tech_ref = Dict(zip(tech_id, convert(Vector{String}, tech_data[:, 8]))) # reference product
+        tech_bid = Dict(zip(tech_id, convert(Vector{Float64}, tech_data[:, 9]))) # technology bid (operating cost)
+        tech_cap = Dict(zip(tech_id, convert(Vector{Float64}, tech_data[:, 10]))) # technology capacity (per time unit)
+        tech_alias = Dict(zip(tech_id, convert(Vector{String}, tech_data[:, 11]))) # technology alias
 
         # Technology mapping data parsing
         techmap_data = readdlm(joinpath(DataDir,"csvdata_techmap.csv"),',',Any,comments=true) # import csv data
-        techmap_id = convert(Array{String}, techmap_data[:, 1])
-        techmap_node = Dict(zip(techmap_id, techmap_data[:, 2])) # technology node (location)
+        techmap_id = convert(Vector{String}, techmap_data[:, 1])
+        techmap_node = Dict{String,String}(zip(techmap_id, convert(Vector{String}, techmap_data[:, 2]))) # technology node (location)
         if UseTime
-            techmap_time = Dict(zip(techmap_id, techmap_data[:, 3])) # technology time (availability)
+            techmap_time = Dict{String,String}(zip(techmap_id, convert(Vector{String}, techmap_data[:, 3]))) # technology time (availability)
         else
-            techmap_time = Dict(zip(techmap_id, repeat(time_id,length(techmap_id)))) # technology time (availability)
+            techmap_time = Dict{String,String}(zip(techmap_id, repeat(time_id,length(techmap_id)))) # technology time (availability)
         end
-        techmap_tech = Dict(zip(techmap_id, techmap_data[:, 4])) # technology type (from tech_id)
+        techmap_tech = Dict{String,String}(zip(techmap_id, convert(Vector{String}, techmap_data[:, 4]))) # technology type (from tech_id)
     else
-        tech_id = []
-        tech_output = Dict() # technology outputs
-        tech_input = Dict() # technology inputs
-        tech_impact = Dict() # technology impacts
-        tech_output_yield = Dict() # product yield factors
-        tech_input_yield = Dict() # product yield factors
-        tech_impact_yield = Dict() # impact yield factors
-        tech_ref = Dict() # reference product
-        tech_bid = Dict() # technology bid (operating cost)
-        tech_cap = Dict() # technology capacity (per time unit)
-        tech_alias = Dict() # technology alias
+        tech_id = Vector{String}()
+        tech_output = Dict{String,Vector{String}}() # technology outputs
+        tech_input = Dict{String,Vector{String}}() # technology inputs
+        tech_impact = Dict{String,Vector{String}}() # technology impacts
+        tech_output_yield = Dict{Tuple{String,String},Float64}() # product yield factors
+        tech_input_yield = Dict{Tuple{String,String},Float64}() # product yield factors
+        tech_impact_yield = Dict{Tuple{String,String},Float64}() # impact yield factors
+        tech_ref = Dict{String,String}() # reference product
+        tech_bid = Dict{String,Float64}() # technology bid (operating cost)
+        tech_cap = Dict{String,Float64}() # technology capacity (per time unit)
+        tech_alias = Dict{String,String}() # technology alias
 
         # Technology mapping data parsing
-        techmap_id = []
-        techmap_node = Dict() # technology node (location)
-        techmap_time = Dict() # technology time (availability)
-        techmap_tech = Dict() # technology type (from tech_id)
+        techmap_id = Vector{String}()
+        techmap_node = Dict{String,String}() # technology node (location)
+        techmap_time = Dict{String,String}() # technology time (availability)
+        techmap_tech = Dict{String,String}() # technology type (from tech_id)
     end
 
     ################################################################################

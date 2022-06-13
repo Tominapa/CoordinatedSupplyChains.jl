@@ -1,0 +1,11 @@
+Node,Time point,Product,Total Supply
+N1,T1,Milk,2.0
+N1,T2,Milk,2.0
+N1,T3,Milk,2.0
+N2,T3,Beef,1.0
+N2,T4,Beef,1.0
+N2,T5,Beef,1.0
+N3,T1,Almonds,0.4
+N3,T2,Almonds,0.4
+N3,T4,Milk,2.0
+N3,T5,Milk,2.0

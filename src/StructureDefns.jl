@@ -4,130 +4,130 @@
 ################################################################################
 ### PRIMARY INDEX SETS
 struct TimeDataStruct
-    ID::Array
-    dt::Dict
+    ID::Vector{String}
+    dt::Dict{String,Float64}
 end
 
 struct NodeDataStruct
-    ID::Array
-    alias::Dict
-    lon::Dict
-    lat::Dict
+    ID::Vector{String}
+    alias::Dict{String,String}
+    lon::Dict{String,Float64}
+    lat::Dict{String,Float64}
 end
 
 struct ArcDataStruct
-    ID::Array
-    n_send::Dict
-    n_recv::Dict
-    t_send::Dict
-    t_recv::Dict
-    bid::Dict
-    cap::Dict
-    len::Dict
-    dur::Dict
-    ID_S::Array
-    ID_T::Array
-    ID_ST::Array
+    ID::Vector{String}
+    n_send::Dict{String,String}
+    n_recv::Dict{String,String}
+    t_send::Dict{String,String}
+    t_recv::Dict{String,String}
+    bid::Dict{Tuple{String,String},Float64}
+    cap::Dict{Tuple{String,String},Float64}
+    len::Dict{String,Float64}
+    dur::Dict{String,Float64}
+    ID_S::Vector{String}
+    ID_T::Vector{String}
+    ID_ST::Vector{String}
 end
 
 struct ProductDataStruct
-    ID::Array
-    alias::Dict
-    transport_cost::Dict
-    storage_cost::Dict
+    ID::Vector{String}
+    alias::Dict{String,String}
+    transport_cost::Dict{String,Float64}
+    storage_cost::Dict{String,Float64}
 end
 
 struct ImpactDataStruct
-    ID::Array
-    alias::Dict
-    transport_coeff::Dict
-    storage_coeff::Dict
+    ID::Vector{String}
+    alias::Dict{String,String}
+    transport_coeff::Dict{String,Float64}
+    storage_coeff::Dict{String,Float64}
 end
 
 struct DemandDataStruct
-    ID::Array
-    node::Dict
-    time::Dict
-    prod::Dict
-    bid::Dict
-    cap::Dict
-    Impacts::Dict
-    ImpactYields::Dict
+    ID::Vector{String}
+    node::Dict{String,String}
+    time::Dict{String,String}
+    prod::Dict{String,String}
+    bid::Dict{String,Float64}
+    cap::Dict{String,Float64}
+    Impacts::Dict{String,Vector{String}}
+    ImpactYields::Dict{Tuple{String,String},Float64}
 end
 
 struct SupplyDataStruct
-    ID::Array
-    node::Dict
-    time::Dict
-    prod::Dict
-    bid::Dict
-    cap::Dict
-    Impacts::Dict
-    ImpactYields::Dict
+    ID::Vector{String}
+    node::Dict{String,String}
+    time::Dict{String,String}
+    prod::Dict{String,String}
+    bid::Dict{String,Float64}
+    cap::Dict{String,Float64}
+    Impacts::Dict{String,Vector{String}}
+    ImpactYields::Dict{Tuple{String,String},Float64}
 end
 
 struct EnvDataStruct
-    ID::Array
-    node::Dict
-    time::Dict
-    impact::Dict
-    bid::Dict
-    cap::Dict
+    ID::Vector{String}
+    node::Dict{String,String}
+    time::Dict{String,String}
+    impact::Dict{String,String}
+    bid::Dict{String,Float64}
+    cap::Dict{String,Float64}
 end
 
 struct TechDataStruct
-    ID::Array
-    Outputs::Dict
-    Inputs::Dict
-    Impacts::Dict
-    OutputYields::Dict
-    InputYields::Dict
-    ImpactYields::Dict
-    InputRef::Dict
-    bid::Dict
-    cap::Dict
-    alias::Dict
+    ID::Vector{String}
+    Outputs::Dict{String,Vector{String}}
+    Inputs::Dict{String,Vector{String}}
+    Impacts::Dict{String,Vector{String}}
+    OutputYields::Dict{Tuple{String,String},Float64}
+    InputYields::Dict{Tuple{String,String},Float64}
+    ImpactYields::Dict{Tuple{String,String},Float64}
+    InputRef::Dict{String,String}
+    bid::Dict{String,Float64}
+    cap::Dict{String,Float64}
+    alias::Dict{String,String}
 end
 
 struct TechmapDataStruct
-    ID::Array
-    node::Dict
-    time::Dict
-    tech::Dict
+    ID::Vector{String}
+    node::Dict{String,String}
+    time::Dict{String,String}
+    tech::Dict{String,String}
 end
 
 struct SetStruct
-    T1::Array
-    Tt::Array
-    TT::Array
-    Tprior::Dict
-    Tpost::Dict
-    Ain::Union{Dict, Nothing}
-    Aout::Union{Dict, Nothing}
-    Dntp::Dict
-    Gntp::Dict
-    Dntq::Union{Dict, Nothing}
-    Gntq::Union{Dict, Nothing}
-    Vntq::Union{Dict, Nothing}
-    DQ::Union{Array, Nothing}
-    GQ::Union{Array, Nothing}
-    NTPgenl::Union{Dict, Nothing}
-    NTPconl::Union{Dict, Nothing}
-    NTQgenl::Union{Dict, Nothing}
+    T1::Vector{String}
+    Tt::Vector{String}
+    TT::Vector{String}
+    Tprior::Dict{String,String}
+    Tpost::Dict{String,String}
+    Ain::Union{Dict{Tuple{String,String},Vector{String}}, Nothing}
+    Aout::Union{Dict{Tuple{String,String},Vector{String}}, Nothing}
+    Dntp::Dict{Tuple{String,String,String},Vector{String}}
+    Gntp::Dict{Tuple{String,String,String},Vector{String}}
+    Dntq::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
+    Gntq::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
+    Vntq::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
+    DQ::Union{Vector{String}, Nothing}
+    GQ::Union{Vector{String}, Nothing}
+    NTPgenl::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
+    NTPconl::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
+    NTQgenl::Union{Dict{Tuple{String,String,String},Vector{String}}, Nothing}
 end
 
 struct ParStruct
-    gMAX::Dict # maximum nodal supply
-    dMAX::Dict # maximum nodal demand
-    eMAX::Union{Dict, Nothing} # maximum environmental demand
-    γiq::Union{Dict, Nothing} # supply impact yield
-    γjq::Union{Dict, Nothing} # demand impact yield
-    γaq::Union{Dict, Nothing} # transport impact yield
-    γmp::Union{Dict, Nothing} # technology product yield
-    γmq::Union{Dict, Nothing} # technology impact yield
-    ξgenMAX::Union{Dict, Nothing} # technology generation capacity
-    ξconMAX::Union{Dict, Nothing} # technology consumption capacity
-    ξenvMAX::Union{Dict, Nothing} # technology impact capacity
+    gMAX::Dict{Tuple{String,String,String},Float64} # maximum nodal supply
+    dMAX::Dict{Tuple{String,String,String},Float64} # maximum nodal demand
+    eMAX::Union{Dict{Tuple{String,String,String},Float64}, Nothing} # maximum environmental demand
+    γiq::Union{Dict{Tuple{String,String},Float64}, Nothing} # supply impact yield
+    γjq::Union{Dict{Tuple{String,String},Float64}, Nothing} # demand impact yield
+    γaq::Union{Dict{Tuple{String,String},Float64}, Nothing} # transport impact yield
+    γmp::Union{Dict{Tuple{String,String},Float64}, Nothing} # technology product yield
+    γmq::Union{Dict{Tuple{String,String},Float64}, Nothing} # technology impact yield
+    ξgenMAX::Union{Dict{Tuple{String,String},Float64}, Nothing} # technology generation capacity
+    ξconMAX::Union{Dict{Tuple{String,String},Float64}, Nothing} # technology consumption capacity
+    ξenvMAX::Union{Dict{Tuple{String,String},Float64}, Nothing} # technology impact capacity
 end
 
 struct ModelStatStruct
@@ -154,23 +154,23 @@ struct SolutionStruct
 end
 
 struct PostSolveValues
-    gNTP::Dict
-    dNTP::Dict
-    eNTQ::Union{Dict,Nothing}
-    ξgen::Union{Dict,Nothing}
-    ξcon::Union{Dict,Nothing}
-    ξenv::Union{Dict,Nothing}
-    π_iq::Union{Dict,Nothing}
-    π_jq::Union{Dict,Nothing}
-    π_a::Union{Dict,Nothing}
-    π_aq::Union{Dict,Nothing}
-    π_m::Union{Dict,Nothing}
-    π_mq::Union{Dict,Nothing}
-    ϕi::Dict
-    ϕj::Dict
-    ϕv::Union{Dict,Nothing}
-    ϕl::Union{Dict,Nothing}
-    ϕa::Union{Dict,Nothing}
+    gNTP::Dict{Tuple{String,String,String},Float64}
+    dNTP::Dict{Tuple{String,String,String},Float64}
+    eNTQ::Union{Dict{Tuple{String,String,String},Float64},Nothing}
+    ξgen::Union{Dict{Tuple{String,String},Float64},Nothing}
+    ξcon::Union{Dict{Tuple{String,String},Float64},Nothing}
+    ξenv::Union{Dict{Tuple{String,String},Float64},Nothing}
+    π_iq::Union{Dict{Tuple{String,String},Float64},Nothing}
+    π_jq::Union{Dict{Tuple{String,String},Float64},Nothing}
+    π_a::Union{Dict{Tuple{String,String},Float64},Nothing}
+    π_aq::Union{Dict{Tuple{String,String},Float64},Nothing}
+    π_m::Union{Dict{Tuple{String,String,String},Float64},Nothing}
+    π_mq::Union{Dict{Tuple{String,String,String,String},Float64},Nothing}
+    ϕi::Dict{String,Float64}
+    ϕj::Dict{String,Float64}
+    ϕv::Union{Dict{String,Float64},Nothing}
+    ϕl::Union{Dict{String,Float64},Nothing}
+    ϕa::Union{Dict{Tuple{String,String},Float64},Nothing}
 end
 
 # Control flow based on input data
