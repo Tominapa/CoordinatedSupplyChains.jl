@@ -132,11 +132,11 @@ WaterUse,Water use - tonne,0.0,0.0
 ### csvdata_arcs.csv
 
 Arc data are structured as follows
-1. Arc ID: a unique string ID for the arc, prefereably of the form A01, A02, ...; no spaces allowed!
+1. Arc ID: a unique string ID for the arc, preferably of the form A01, A02, ...; no spaces allowed!
 2. Arc first node: a Node ID included in node_data.csv
 3. Arc second node: a Node ID included in node_data.csv
 4. Arc capacity: a vector of numbers representing the product capacity of the arc; units (tonne)
-5. Custom length (optional): A number representing the length of the arc; units: (km); used only if the CustomLengths parameter is set true; >=0
+5. Custom length (optional): A number representing the length of the arc; units: (km); used only if the CustomLengths parameter is set true; positive-valued
 
 Our example has the following arcs
 ```
@@ -229,13 +229,13 @@ D30,N3,T5,Beef,25000,0.4,,
 ```
 
 
-###csvdata_env.csv
+### csvdata_env.csv
 
 This data file defines environmental impact consumption and policy, and consists of
 1. Environmental. stakeholder ID: a unique ID for the environmental stakeholder
 2. Node: a Node ID included in csvdata_node.csv, where the environmental stakeholder is located
 3. Time: a Time point ID included in csvdata_time.csv, when the environmental stakeholder is available
-4. Impact: an Impact ID included in csvdata_impact.csv that the environmental stakeholder will coonsumer
+4. Impact: an Impact ID included in csvdata_impact.csv that the environmental stakeholder will consumer
 5. Bid: a number representing the environmental stakeholder bid for a product; a real number
 6. Capacity: a number representing the maximum amount consumed; a positive number
 
