@@ -141,17 +141,17 @@ function PostSolveCalcs(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, SOL, CF)
     for n in N.ID
         for t in T.ID
             for p in P.ID
-                if Subsets.Gntp[n,t,p] != []
-                    gNTP[n,t,p] = sum(SOL.g[i] for i in Subsets.Gntp[n,t,p])
-                end
-                if Subsets.Dntp[n,t,p] != [] 
-                    dNTP[n,t,p] = sum(SOL.d[j] for j in Subsets.Dntp[n,t,p])
-                end
+                #if Subsets.Gntp[n,t,p] != []
+                    gNTP[n,t,p] = reduce(+,SOL.g[i] for i in Subsets.Gntp[n,t,p];init=0)
+                #end
+                #if Subsets.Dntp[n,t,p] != [] 
+                    dNTP[n,t,p] = reduce(+,SOL.d[j] for j in Subsets.Dntp[n,t,p];init=0)
+                #end
             end
             for q in Q.ID
-                if Subsets.Vntq[n,t,q] != []
-                    eNTQ[n,t,q] = sum(SOL.e[v] for v in Subsets.Vntq[n,t,q])
-                end
+                #if Subsets.Vntq[n,t,q] != []
+                    eNTQ[n,t,q] = reduce(+,SOL.e[v] for v in Subsets.Vntq[n,t,q];init=0)
+                #end
             end
         end
     end
@@ -210,7 +210,7 @@ function PostSolveCalcs(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, SOL, CF)
     for m in M.ID
         for n in N.ID
             for t in T.ID
-                π_m[m,n,t] = sum(Pars.γmp[m,p]*SOL.πp[n,t,p] for p in M.Outputs[m]) - sum(Pars.γmp[m,p]*SOL.πp[n,t,p] for p in M.Inputs[m])    
+                π_m[m,n,t] = reduce(+,Pars.γmp[m,p]*SOL.πp[n,t,p] for p in M.Outputs[m];init=0) - reduce(+,Pars.γmp[m,p]*SOL.πp[n,t,p] for p in M.Inputs[m];init=0)    
                 for q in M.Impacts[m]
                     π_mq[m,n,t,q] = Pars.γmq[m,q]*SOL.πq[n,t,q]
                 end
@@ -250,7 +250,7 @@ function PostSolveCalcs(T, N, P, Q, A, D, G, V, M, L, Subsets, Pars, SOL, CF)
     ϕa = DictInit([A.ID,P.ID], 0.0)
     for a in A.ID
         for p in P.ID
-            ϕa[a,p] = (π_a[a,p] + sum(π_aq[a,q] for q in Q.ID) - A.bid[a,p])*SOL.f[a,p]
+            ϕa[a,p] = (π_a[a,p] + reduce(+,π_aq[a,q] for q in Q.ID) - A.bid[a,p];init=0)*SOL.f[a,p]
         end
     end
 

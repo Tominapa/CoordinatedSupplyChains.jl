@@ -1,7 +1,7 @@
 name = "CoordinatedSupplyChains"
 uuid = "3aaabd38-80f0-440d-8028-ff5345734cd4"
 authors = ["Philip A Tominac <tominac@wisc.edu> and contributors"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
